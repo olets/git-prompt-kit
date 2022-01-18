@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # Git Prompt Kit
-# v2.2.0
+# v3.0.0
 # Jan 17 2022
 # https://github.com/olets/git-prompt-kit
 # Copyright (©) 2020-present Henry Bley-Vroman

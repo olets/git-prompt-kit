@@ -1,6 +1,8 @@
-# [v2.2.0](https://github.com/olets/git-prompt-kit/compare/v2.1.0...v2.2.0) (2022-01-17)
+# [v3.0.0](https://github.com/olets/git-prompt-kit/compare/v2.1.0...v3.0.0) (2022-01-17)
 
-New cwd, root, and workdir (root + cwd) components
+New cwd, root, and workdir (root + cwd) components.
+
+Breaking change: dropped the "custom" component.
 
 ### Features
 

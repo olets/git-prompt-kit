@@ -375,7 +375,11 @@ _git_prompt_kit_update_git() {
       fi
 
       if (( show_remote )); then
-        GIT_PROMPT_KIT_REMOTE+="$VCS_STATUS_REMOTE_NAME/$VCS_STATUS_REMOTE_BRANCH"
+        GIT_PROMPT_KIT_REMOTE+="$VCS_STATUS_REMOTE_NAME"
+      fi
+
+      if (( show_remote && show_remote_branch )); then
+        GIT_PROMPT_KIT_REMOTE+="/"
       fi
 
       if (( show_remote_branch )); then

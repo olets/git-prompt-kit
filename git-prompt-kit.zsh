@@ -232,6 +232,10 @@ _git_prompt_kit_update_git() {
     show_remote=1
   fi
 
+  if [[ $VCS_STATUS_LOCAL_BRANCH != $VCS_STATUS_REMOTE_BRANCH ]]; then
+    show_remote_branch=1
+  fi
+
   if [[ -n $VCS_STATUS_PUSH_REMOTE_NAME ]] && [[ $VCS_STATUS_PUSH_REMOTE_NAME != $VCS_STATUS_REMOTE_NAME ]]; then
     triangular_workflow=1
   fi
@@ -239,15 +243,12 @@ _git_prompt_kit_update_git() {
   if (( triangular_workflow )) && [[ $VCS_STATUS_PUSH_REMOTE_NAME != $GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME ]]; then
     show_push_remote=1
   fi
-
-  if [[ $VCS_STATUS_LOCAL_BRANCH != $VCS_STATUS_REMOTE_BRANCH ]]; then
-    show_remote_branch=1
-  fi
+  
   (( show_ahead = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_COMMITS_AHEAD ))
   (( show_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_COMMITS_BEHIND ))
   # show_push_remote_branch would go here
-  (( show_push_ahead = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_COMMITS_AHEAD ))
-  (( show_push_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_COMMITS_BEHIND ))
+  (( show_push_ahead = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_AHEAD ))
+  (( show_push_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_BEHIND ))
 
   # Git directory
 

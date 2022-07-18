@@ -367,7 +367,7 @@ _git_prompt_kit_update_git() {
     fi
 
     if [[ -n $VCS_STATUS_REMOTE_BRANCH ]]; then
-      if (( show_remote || show_remote_branch)); then
+      if (( show_remote || show_remote_branch )); then
         if (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
           GIT_PROMPT_KIT_REMOTE+="%F{$GIT_PROMPT_KIT_COLOR_REMOTE}"
         fi
@@ -387,7 +387,7 @@ _git_prompt_kit_update_git() {
         GIT_PROMPT_KIT_REMOTE+="$VCS_STATUS_REMOTE_BRANCH"
       fi
 
-      if (( show_remote || show_remote_branch)) && (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
+      if (( show_remote || show_remote_branch )) && (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
         GIT_PROMPT_KIT_REMOTE+="%F{$GIT_PROMPT_KIT_COLOR_INACTIVE}"
       fi
 

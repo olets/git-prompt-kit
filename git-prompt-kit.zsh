@@ -138,6 +138,10 @@ git-prompt-kit-colors() {
   for color in ${(o)_git_prompt_kit_colors}; do
     'builtin' 'print' -P "%F{${(P)color}}● $color%f"
   done
+
+  if _git_prompt_kit_no_color; then
+    'builtin' 'print' "NO_COLOR is set so colors are not used"
+  fi
 }
 
 git-prompt-kit-config() {

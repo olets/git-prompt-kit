@@ -104,10 +104,18 @@ Support varies by terminal emulator.
 
 > Tip: To check a color it can be useful to run `print -P %F{<color>}<text>%f`, for example `print -P %F{199}●%f`.
 
-See [Issue #1: README appendix: default colors' swatches](https://github.com/olets/git-prompt-kit/issues/1) for the following table but with swatches. They may appear differently in your terminal. To visualize the configured colors in your terminal, run
+See [Issue #1: README appendix: default colors' swatches](https://github.com/olets/git-prompt-kit/issues/1) for the following table but with swatches. They may appear differently in your terminal.
+
+To visualize the configured colors, run
 
 ```shell
 git-prompt-kit-colors
+```
+
+To print the configured values, run
+
+```shell
+git-prompt-kit-config
 ```
 
 Name | Type | Description | Default
@@ -131,6 +139,12 @@ Name | Type | Description | Default
 
 ### Content options
 
+To print the configured values, run
+
+```shell
+git-prompt-kit-config
+```
+
 Name | Type | Description | Default
 ---|---|---|---
 `GIT_PROMPT_KIT_CWD_TRAILING_COUNT` | integer | The maximum number of trailing path components in the current working directory component. When in a Git repository, this is relative to the Git root. If less than zero, show all | `1`
@@ -143,7 +157,11 @@ Name | Type | Description | Default
 
 ### Layout options
 
-"Git ref segment" is HEAD, commits ahead/behind, upstream, and tag.
+To print the configured values, run
+
+```shell
+git-prompt-kit-config
+```
 
 Name | Type | Description | Default
 ---|---|---|---
@@ -152,7 +170,13 @@ Name | Type | Description | Default
 
 ### Symbol options
 
-The default symbols should work well in any font. The default Git file status symbols are [Git's own short format](https://git-scm.com/docs/git-status#_short_format) (underscore `_` represents column placement in `git-status --short`'s output).
+To print the configured values, run
+
+```shell
+git-prompt-kit-config
+```
+
+The default symbols should work well in any font. The default Git file status symbols are based on [Git's own short format](https://git-scm.com/docs/git-status#_short_format) (underscore `_` represents column placement in `git-status --short`'s output).
 
 Name | Type | Description | Default
 ---|---|---|---

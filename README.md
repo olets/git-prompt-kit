@@ -140,7 +140,6 @@ Name | Type | Description | Default
 `GIT_PROMPT_KIT_HIDDEN_USERS` | array | The users that will not be included in the prompt | `()`
 `GIT_PROMPT_KIT_LOCAL` | string | Shown if the checked-out branch has no upstream | `local`
 `GIT_PROMPT_KIT_ROOT_TRAILING_COUNT` | integer | The maximum number of trailing path components in the Git root directory component. If less than zero, show all | `1`
-`GIT_PROMPT_KIT_SHOW_EXTENDED_STATUS` | number | If non-zero show the stash, assume-unchanged, and skip-worktree counts | `1`
 
 ### Layout options
 

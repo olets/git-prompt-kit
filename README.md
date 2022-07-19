@@ -140,7 +140,7 @@ Name | Type | Description | Default
 `GIT_PROMPT_KIT_HIDDEN_USERS` | array | The users that will not be included in the prompt | `()`
 `GIT_PROMPT_KIT_LOCAL` | string | Shown if the checked-out branch has no upstream | `local`
 `GIT_PROMPT_KIT_ROOT_TRAILING_COUNT` | integer | The maximum number of trailing path components in the Git root directory component. If less than zero, show all | `1`
-`GIT_PROMPT_KIT_SHOW_EXTENDED_STATUS` | number | Show the stash, assume-unchanged, and skip-worktree counts (YES if non-zero, NO if zero) | `1`
+`GIT_PROMPT_KIT_SHOW_EXTENDED_STATUS` | number | If non-zero show the stash, assume-unchanged, and skip-worktree counts | `1`
 
 ### Layout options
 
@@ -148,8 +148,8 @@ Name | Type | Description | Default
 
 Name | Type | Description | Default
 ---|---|---|---
-`GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF` | number | _Do_ add a line break after the Git ref segment? (LINEBREAK if non-zero, NO LINEBREAK if zero) | `1`
-`GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF` | number | Do _not_ add a line break before the Git ref segment? (NO LINEBREAK if non-zero, LINEBREAK if zero) | `1`
+`GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF` | number | If **non-zero**, `GIT_PROMPT_KIT_REF` ends with a line break | `1`
+`GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF` | number | If **zero**, `GIT_PROMPT_KIT_REF` starts with a line break | `1`
 
 ### Symbol options
 

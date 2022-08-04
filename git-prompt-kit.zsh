@@ -4,7 +4,7 @@
 # v3.0.0
 # Jan 17 2022
 # https://github.com/olets/git-prompt-kit
-# Copyright (©) 2020-present Henry Bley-Vroman
+# Copyright (©) 2019-present Henry Bley-Vroman
 #
 # Forked from and requires gitstatus prompt
 # https://github.com/romkatv/gitstatus

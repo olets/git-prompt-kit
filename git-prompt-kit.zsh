@@ -653,7 +653,7 @@ _git_prompt_kit_no_color() {
 gitstatus_stop$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME && gitstatus_start$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX -s -1 -u -1 -c -1 -d -1 $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME
 
 # Support colors unless user has opted out
-if ! _abbr_no_color; then
+if ! _git_prompt_kit_no_color; then
   'builtin' 'autoload' -U colors && colors
 fi
 

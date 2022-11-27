@@ -1,3 +1,24 @@
+# [v3.0.1](https://github.com/olets/git-prompt-kit/compare/v3.0.0...v3.0.1) (2022-11-27)
+
+
+### Bug Fixes
+
+* **binaries:** delete and ignore ([8614ab1](https://github.com/olets/git-prompt-kit/commit/8614ab10b572a5ba07f91a82b16f1696b00a6b15))
+* **nocolor:** rely on gpk function ([41e8541](https://github.com/olets/git-prompt-kit/commit/41e8541cfda3f8b25923d36395bebcce5e848f99))
+* **remote:** do not duplicate branch name ([c1645fe](https://github.com/olets/git-prompt-kit/commit/c1645fe6b7faab0e90ed23d6f8fb9a8aac8fd83b))
+* **skip-worktree:** no trailing space in default symbol ([71c39e8](https://github.com/olets/git-prompt-kit/commit/71c39e87429066719b93c02c6b7573e99dc5175b))
+
+
+### Features
+
+* **extended status:** no unnecessary space before components ([d857c6f](https://github.com/olets/git-prompt-kit/commit/d857c6f82e3fe0252f72b88b429c02e47c0350cc))
+* **git-prompt-kit-config:** include NO_COLOR status ([e53c86b](https://github.com/olets/git-prompt-kit/commit/e53c86b4884586c159a01c3c80a48dadd3f53f8b))
+* **NO_COLOR:** support ([5605412](https://github.com/olets/git-prompt-kit/commit/560541242a02a95f61590458b61d60d92d698aa7))
+* **push remote:** show counts for commits ahead/behind ([85a68e6](https://github.com/olets/git-prompt-kit/commit/85a68e6a5e17de985e84652f545420807b6c1d01))
+* **triangular workflow:** behind upstream is not colored ([a32259a](https://github.com/olets/git-prompt-kit/commit/a32259aa438cffa24952096ada14d16a4840d595))
+
+
+
 # [v3.0.0](https://github.com/olets/git-prompt-kit/compare/v2.1.0...v3.0.0) (2022-01-17)
 
 New cwd, root, and workdir (root + cwd) components.

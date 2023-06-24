@@ -155,19 +155,6 @@ Name | Type | Description | Default
 `GIT_PROMPT_KIT_LOCAL` | string | Shown if the checked-out branch has no upstream | `local`
 `GIT_PROMPT_KIT_ROOT_TRAILING_COUNT` | integer | The maximum number of trailing path components in the Git root directory component. If less than zero, show all | `1`
 
-### Layout options
-
-To print the configured values, run
-
-```shell
-git-prompt-kit-config
-```
-
-Name | Type | Description | Default
----|---|---|---
-`GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF` | number | If **non-zero**, `GIT_PROMPT_KIT_REF` ends with a line break | `1`
-`GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF` | number | If **zero**, `GIT_PROMPT_KIT_REF` starts with a line break | `1`
-
 ### Symbol options
 
 To print the configured values, run

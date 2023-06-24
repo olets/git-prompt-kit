@@ -218,7 +218,6 @@ _git_prompt_kit_update_git() {
   local -i show_behind
   local -i show_push_ahead
   local -i show_push_behind
-  local -i show_push_remote
   local -i show_remote
   local -i show_remote_branch
   local -i triangular_workflow
@@ -252,10 +251,6 @@ _git_prompt_kit_update_git() {
 
   if [[ -n $VCS_STATUS_PUSH_REMOTE_NAME ]] && [[ $VCS_STATUS_PUSH_REMOTE_NAME != $VCS_STATUS_REMOTE_NAME ]]; then
     triangular_workflow=1
-  fi
-
-  if (( triangular_workflow )) && [[ $VCS_STATUS_PUSH_REMOTE_NAME != $GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME ]]; then
-    show_push_remote=1
   fi
   
   (( show_ahead = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_COMMITS_AHEAD ))
@@ -425,7 +420,7 @@ _git_prompt_kit_update_git() {
         GIT_PROMPT_KIT_PUSH+="%F{$color_push_remote}"
       fi
 
-      if (( show_push_remote )); then
+      if [[ $VCS_STATUS_PUSH_REMOTE_NAME != $GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME ]]; then
         GIT_PROMPT_KIT_PUSH+="$GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE$VCS_STATUS_PUSH_REMOTE_NAME"
       fi
 

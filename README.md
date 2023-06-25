@@ -163,30 +163,34 @@ To print the configured values, run
 git-prompt-kit-config
 ```
 
-The default symbols should work well in any font. The default Git file status symbols are based on [Git's own short format](https://git-scm.com/docs/git-status#_short_format) (underscore `_` represents column placement in `git-status --short`'s output).
+The default symbols should work well in any font.
 
-Name | Type | Description | Default
+The default Git file status symbols are based on [Git's own short format](https://git-scm.com/docs/git-status#_short_format) (underscore `_` represents empty columns in `git-status --short`'s output). The alternate "verbose" set of default symbols take up more space, but their meaning may be clearer.
+
+Name | Type | Description | Default / verbose
 ---|---|---|---
-`GIT_PROMPT_KIT_SYMBOL_AHEAD` | string | Precedes the Git commits-ahead segment | `+`
-`GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED` | string | Follows the Git assume-unchanged segment | `⥱ `
-`GIT_PROMPT_KIT_SYMBOL_BEHIND` | string | Precedes the Git commits-behind segment | `-`
-`GIT_PROMPT_KIT_SYMBOL_BRANCH` | string | Precedes the Git branch | none
-`GIT_PROMPT_KIT_SYMBOL_CHAR_NORMAL` | string | Character shown at end of prompt for normal users | `%%` *
-`GIT_PROMPT_KIT_SYMBOL_CHAR_ROOT` | string | Character shown at end of prompt for root users | `#`
-`GIT_PROMPT_KIT_SYMBOL_COMMIT` | string | Precedes the Git commit | none
-`GIT_PROMPT_KIT_SYMBOL_CONFLICTED` | string | Follows the Git conflicted files segment | `UU`
-`GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED` | string | Follows the Git unstaged deleted file segment | `D_`
-`GIT_PROMPT_KIT_SYMBOL_DELETED` | string | Follows the Git unstaged deleted file segment | `_D`
-`GIT_PROMPT_KIT_SYMBOL_HOST` | string | Precedes the host | `@`
-`GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED` | string | Follows the Git staged modified file segment | `M_`
-`GIT_PROMPT_KIT_SYMBOL_MODIFIED` | string | Follows the Git unstaged modified file segment | `_M`
-`GIT_PROMPT_KIT_SYMBOL_NEW` | string | Follows Git new file segment | `A_`
-`GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE` | string | Precedes the Git push remote | `@{push}`
-`GIT_PROMPT_KIT_SYMBOL_REMOTE` | string | Precedes the Git remote | `@{u}`
-`GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE` | string | Follows the Git skip-worktree file segment | `⤳`
-`GIT_PROMPT_KIT_SYMBOL_STASH` | string | Follows the Git stash segment | `⇲`
-`GIT_PROMPT_KIT_SYMBOL_TAG` | string | Precedes the Git tag | `@`
-`GIT_PROMPT_KIT_SYMBOL_UNTRACKED` | string | Follows Git untracked file segment | `??`
+`GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS` | string | Set to a non-empty string to enable the verbose default symbols | empty string
+|||
+`GIT_PROMPT_KIT_SYMBOL_AHEAD` | string | Precedes the Git commits-ahead segment | `+` / `ahead `
+`GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED` | string | Follows the Git assume-unchanged segment | `⥱ ` / `assumed unchanged`
+`GIT_PROMPT_KIT_SYMBOL_BEHIND` | string | Precedes the Git commits-behind segment | `-` / `behind `
+`GIT_PROMPT_KIT_SYMBOL_BRANCH` | string | Precedes the Git branch | none / `branch: `
+`GIT_PROMPT_KIT_SYMBOL_CHAR_NORMAL` | string | Character shown at end of prompt for normal users | `%%` * / `commit: `
+`GIT_PROMPT_KIT_SYMBOL_CHAR_ROOT` | string | Character shown at end of prompt for root users | `#` / 
+`GIT_PROMPT_KIT_SYMBOL_COMMIT` | string | Precedes the Git commit | none / `commit: `
+`GIT_PROMPT_KIT_SYMBOL_CONFLICTED` | string | Follows the Git conflicted files segment | `UU` / ` conflicted`
+`GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED` | string | Follows the Git unstaged deleted file segment | `D_` / ` staged deleted`
+`GIT_PROMPT_KIT_SYMBOL_DELETED` | string | Follows the Git unstaged deleted file segment | `_D` / ` deleted`
+`GIT_PROMPT_KIT_SYMBOL_HOST` | string | Precedes the host | `@` / ` host: `
+`GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED` | string | Follows the Git staged modified file segment | `M_` / ` modified staged`
+`GIT_PROMPT_KIT_SYMBOL_MODIFIED` | string | Follows the Git unstaged modified file segment | `_M` / ` modified`
+`GIT_PROMPT_KIT_SYMBOL_NEW` | string | Follows Git new file segment | `A_` / ` new`
+`GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE` | string | Precedes the Git push remote | `@{push}` / `push remote: `
+`GIT_PROMPT_KIT_SYMBOL_REMOTE` | string | Precedes the Git remote | `@{u}` / `remote: `
+`GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE` | string | Follows the Git skip-worktree file segment | `⤳` / ` skip worktree`
+`GIT_PROMPT_KIT_SYMBOL_STASH` | string | Follows the Git stash segment | `⇲` / ` stashes`
+`GIT_PROMPT_KIT_SYMBOL_TAG` | string | Precedes the Git tag | `@` / `tag: `
+`GIT_PROMPT_KIT_SYMBOL_UNTRACKED` | string | Follows Git untracked file segment | `??` / ` untracked`
 
 \* `%%` expands as `%` in the zsh prompt.
 

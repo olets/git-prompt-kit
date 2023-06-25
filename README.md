@@ -235,7 +235,7 @@ Name | Type | Description
 `GIT_PROMPT_KIT_PUSH_AHEAD` | prompt string | Git: commits ahead of the push remote
 `GIT_PROMPT_KIT_PUSH_BEHIND` | prompt string | Git: commits behind the push remote
 `GIT_PROMPT_KIT_PUSH` | prompt string | Git: push remote if not the default
-`GIT_PROMPT_KIT_REMOTE` | prompt string | Git: "local" if no upstream; upstream branch if the name differs from the local branch; upstream remote and branch if the remote is not the default
+`GIT_PROMPT_KIT_REMOTE` | prompt string | Git: `GIT_PROMPT_KIT_LOCAL` if no upstream; upstream branch if the name differs from the local branch; upstream remote and branch if the remote is not the default
 `GIT_PROMPT_KIT_ROOT` | prompt string | Git root directory, underlined, with trailing directories.
 `GIT_PROMPT_KIT_SKIP_WORKTREE` | prompt string | Git: skip-worktree files count
 `GIT_PROMPT_KIT_STASHES` | prompt string | Git: stash count

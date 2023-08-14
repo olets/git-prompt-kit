@@ -254,8 +254,6 @@ _git_prompt_kit_update_git() {
   (( show_push_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_BEHIND ))
 
   # Git directory
-
-  GIT_PROMPT_KIT_ROOT+="%F{$color_workdir}"
   root_path_components=( ${(s./.)VCS_STATUS_WORKDIR} )
 
   if (( GIT_PROMPT_KIT_ROOT_TRAILING_COUNT + 1 >= ${#root_path_components} )) || (( GIT_PROMPT_KIT_ROOT_TRAILING_COUNT < 0 )); then
@@ -263,7 +261,13 @@ _git_prompt_kit_update_git() {
   else
     GIT_PROMPT_KIT_ROOT+=${(j./.)root_path_components[$(( -1 - GIT_PROMPT_KIT_ROOT_TRAILING_COUNT )),-2]}
   fi
-  GIT_PROMPT_KIT_ROOT+="/%U${root_path_components[-1]}%u"
+
+  if [[ -n $GIT_PROMPT_KIT_ROOT ]]; then
+    GIT_PROMPT_KIT_ROOT+="/"
+  fi
+  
+  GIT_PROMPT_KIT_ROOT="%F{$color_workdir}$GIT_PROMPT_KIT_ROOT"
+  GIT_PROMPT_KIT_ROOT+="%U${root_path_components[-1]}%u"
   GIT_PROMPT_KIT_ROOT+="%F{$color_inactive}"
 
   # Git tree status: stashes

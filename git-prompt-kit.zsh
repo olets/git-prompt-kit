@@ -401,8 +401,8 @@ _git_prompt_kit_update_git() {
         fi
 
         if (( triangular_workflow )); then
-        GIT_PROMPT_KIT_REMOTE+="$GIT_PROMPT_KIT_SYMBOL_REMOTE"
-      fi
+          GIT_PROMPT_KIT_REMOTE+="$GIT_PROMPT_KIT_SYMBOL_REMOTE"
+        fi
       fi
 
       if (( show_remote )); then
@@ -453,7 +453,7 @@ _git_prompt_kit_update_git() {
         (( VCS_STATUS_PUSH_COMMITS_AHEAD )) && GIT_PROMPT_KIT_PUSH_AHEAD+="%F{$color_push_remote}"
         GIT_PROMPT_KIT_PUSH_AHEAD+="$GIT_PROMPT_KIT_SYMBOL_AHEAD"
         (( VCS_STATUS_PUSH_COMMITS_AHEAD )) && GIT_PROMPT_KIT_PUSH_AHEAD+="$VCS_STATUS_PUSH_COMMITS_AHEAD"
-        GIT_PROMPT_KIT_AHEAD+="%F{$color_inactive}"
+        GIT_PROMPT_KIT_PUSH_AHEAD+="%F{$color_inactive}"
       fi
 
       if (( show_push_behind )); then

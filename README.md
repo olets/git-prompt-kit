@@ -152,7 +152,6 @@ Name | Type | Description | Default
 `GIT_PROMPT_KIT_DEFAULT_REMOTE_NAME` | string | The default Git remote | `origin`
 `GIT_PROMPT_KIT_HIDDEN_HOSTS` | array | The hosts that will not be included in the prompt | `()`
 `GIT_PROMPT_KIT_HIDDEN_USERS` | array | The users that will not be included in the prompt | `()`
-`GIT_PROMPT_KIT_LOCAL` | string | Shown if the checked-out branch has no upstream | `local`
 `GIT_PROMPT_KIT_ROOT_TRAILING_COUNT` | integer | The maximum number of trailing path components in the Git root directory component. If less than zero, show all | `1`
 
 ### Symbol options
@@ -182,6 +181,7 @@ Name | Type | Description | Default / verbose
 `GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED` | string | Follows the Git unstaged deleted file segment | `D_` / ` staged deleted`
 `GIT_PROMPT_KIT_SYMBOL_DELETED` | string | Follows the Git unstaged deleted file segment | `_D` / ` deleted`
 `GIT_PROMPT_KIT_SYMBOL_HOST` | string | Precedes the host | `@` / ` host: `
+`GIT_PROMPT_KIT_SYMBOL_LOCAL` | string | Shown if the checked-out branch has no upstream | `local`
 `GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED` | string | Follows the Git staged modified file segment | `M_` / ` modified staged`
 `GIT_PROMPT_KIT_SYMBOL_MODIFIED` | string | Follows the Git unstaged modified file segment | `_M` / ` modified`
 `GIT_PROMPT_KIT_SYMBOL_NEW` | string | Follows Git new file segment | `A_` / ` new`
@@ -239,7 +239,7 @@ Name | Type | Description
 `GIT_PROMPT_KIT_PUSH_AHEAD` | prompt string | Git: commits ahead of the push remote
 `GIT_PROMPT_KIT_PUSH_BEHIND` | prompt string | Git: commits behind the push remote
 `GIT_PROMPT_KIT_PUSH` | prompt string | Git: push remote if not the default
-`GIT_PROMPT_KIT_REMOTE` | prompt string | Git: `GIT_PROMPT_KIT_LOCAL` if no upstream; upstream branch if the name differs from the local branch; upstream remote and branch if the remote is not the default
+`GIT_PROMPT_KIT_REMOTE` | prompt string | Git: `GIT_PROMPT_KIT_SYMBOL_LOCAL` if no upstream; upstream branch if the name differs from the local branch; upstream remote and branch if the remote is not the default
 `GIT_PROMPT_KIT_ROOT` | prompt string | Git root directory, underlined, with trailing directories.
 `GIT_PROMPT_KIT_SKIP_WORKTREE` | prompt string | Git: skip-worktree files count
 `GIT_PROMPT_KIT_STASHES` | prompt string | Git: stash count

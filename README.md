@@ -135,7 +135,7 @@ Name | Type | Description | Default
 `GIT_PROMPT_KIT_COLOR_TAG` | string | Color of Git tag segment | `86`
 `GIT_PROMPT_KIT_COLOR_UNSTAGED` | string | Color of Git unstaged files segment | `162`
 `GIT_PROMPT_KIT_COLOR_USER` | string | Color of the user | `109`
-`GIT_PROMPT_KIT_COLOR_WORKDIR` | string | Color of the directory segment | `39`
+`GIT_PROMPT_KIT_COLOR_CWD` | string | Color of the directory segment | `39`
 
 ### Content options
 
@@ -147,12 +147,13 @@ git-prompt-kit-config
 
 Name | Type | Description | Default
 ---|---|---|---
-`GIT_PROMPT_KIT_CWD_TRAILING_COUNT` | integer | The maximum number of trailing path components in the current working directory component. When in a Git repository, this is relative to the Git root. If less than zero, show all | `1`
+`GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT` | integer | The maximum number of trailing path components in the `GIT_PROMPT_KIT_CWD`. Additional components will be ellided with `...`. If less than zero, show all | `1`
 `GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME` | string | The default Git push remote | `upstream`
 `GIT_PROMPT_KIT_DEFAULT_REMOTE_NAME` | string | The default Git remote | `origin`
 `GIT_PROMPT_KIT_HIDDEN_HOSTS` | array | The hosts that will not be included in the prompt | `()`
 `GIT_PROMPT_KIT_HIDDEN_USERS` | array | The users that will not be included in the prompt | `()`
-`GIT_PROMPT_KIT_ROOT_TRAILING_COUNT` | integer | The maximum number of trailing path components in the Git root directory component. If less than zero, show all | `1`
+`GIT_PROMPT_KIT_LOCAL` | string | Shown if the checked-out branch has no upstream | `local`
+`GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT` | integer | The maximum number of trailing path components in `GIT_PROMPT_KIT_REPO_SUBDIRECTORY`. Additional components will be ellided with `...`. If less than zero, show all | `1`
 
 ### Symbol options
 
@@ -181,7 +182,6 @@ Name | Type | Description | Default / verbose
 `GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED` | string | Follows the Git unstaged deleted file segment | `D_` / ` staged deleted`
 `GIT_PROMPT_KIT_SYMBOL_DELETED` | string | Follows the Git unstaged deleted file segment | `_D` / ` deleted`
 `GIT_PROMPT_KIT_SYMBOL_HOST` | string | Precedes the host | `@` / ` host: `
-`GIT_PROMPT_KIT_SYMBOL_LOCAL` | string | Shown if the checked-out branch has no upstream | `local`
 `GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED` | string | Follows the Git staged modified file segment | `M_` / ` modified staged`
 `GIT_PROMPT_KIT_SYMBOL_MODIFIED` | string | Follows the Git unstaged modified file segment | `_M` / ` modified`
 `GIT_PROMPT_KIT_SYMBOL_NEW` | string | Follows Git new file segment | `A_` / ` new`
@@ -215,8 +215,7 @@ Using Git Prompt Kit for everything
 # ~/.zshrc
 # --- snip ---
 # Load Git Prompt Kit (will differ depending on installation method)
-GIT_PROMPT_KIT_WORKDIR_DEPTH='2'
-PROMPT='$GIT_PROMPT_KIT_WORKDIR ${GIT_PROMPT_KIT_HEAD:+$GIT_PROMPT_KIT_HEAD }$GIT_PROMPT_KIT_CHAR '
+PROMPT='$GIT_PROMPT_KIT_CWD ${GIT_PROMPT_KIT_HEAD:+$GIT_PROMPT_KIT_HEAD }$GIT_PROMPT_KIT_CHAR '
 ```
 
 ### Atom components
@@ -229,7 +228,6 @@ Name | Type | Description
 `GIT_PROMPT_KIT_BEHIND` | prompt string | Git: commits behind the upstream
 `GIT_PROMPT_KIT_CHAR` | prompt string | Prompt character
 `GIT_PROMPT_KIT_CONFLICTED` | prompt string | Git: conflicted files count
-`GIT_PROMPT_KIT_CWD` | prompt string | Current working directory with trailing directories. If in a Git repo, relative to the Git root.
 `GIT_PROMPT_KIT_DELETED_STAGED` | prompt string | Git: staged deleted files count
 `GIT_PROMPT_KIT_DELETED` | prompt string | Git: unstaged deleted files count
 `GIT_PROMPT_KIT_HEAD` | prompt string | Git: HEAD (branch or commit)
@@ -239,8 +237,9 @@ Name | Type | Description
 `GIT_PROMPT_KIT_PUSH_AHEAD` | prompt string | Git: commits ahead of the push remote
 `GIT_PROMPT_KIT_PUSH_BEHIND` | prompt string | Git: commits behind the push remote
 `GIT_PROMPT_KIT_PUSH` | prompt string | Git: push remote if not the default
-`GIT_PROMPT_KIT_REMOTE` | prompt string | Git: `GIT_PROMPT_KIT_SYMBOL_LOCAL` if no upstream; upstream branch if the name differs from the local branch; upstream remote and branch if the remote is not the default
-`GIT_PROMPT_KIT_ROOT` | prompt string | Git root directory, underlined, with trailing directories.
+`GIT_PROMPT_KIT_REMOTE` | prompt string | Git: `GIT_PROMPT_KIT_LOCAL` if no upstream; upstream branch if the name differs from the local branch; upstream remote and branch if the remote is not the default
+`GIT_PROMPT_KIT_REPO_ROOT` | prompt string | Git root directory, underlined, with trailing directories.
+`GIT_PROMPT_KIT_REPO_SUBDIRECTORY` | prompt string | Subdirectory relative to the Git root
 `GIT_PROMPT_KIT_SKIP_WORKTREE` | prompt string | Git: skip-worktree files count
 `GIT_PROMPT_KIT_STASHES` | prompt string | Git: stash count
 `GIT_PROMPT_KIT_TAG` | prompt string | Git: up to one tag at HEAD
@@ -251,10 +250,10 @@ Name | Type | Description
 
 Name | Type | Description
 ---|---|---
+`GIT_PROMPT_KIT_CWD` | prompt string | If in a Git repo, `GIT_PROMPT_KIT_REPO_ROOT` and `GIT_PROMPT_KIT_REPO_SUBDIRECTORY`. Otherwise current working directory with trailing directories.
 `GIT_PROMPT_KIT_REF` | prompt string | `GIT_PROMPT_KIT_HEAD`, `GIT_PROMPT_KIT_AHEAD`, `GIT_PROMPT_KIT_BEHIND`, `GIT_PROMPT_KIT_REMOTE`, `GIT_PROMPT_KIT_PUSH`, and `GIT_PROMPT_KIT_TAG`
 `GIT_PROMPT_KIT_STATUS` | prompt string | `GIT_PROMPT_KIT_UNTRACKED`, `GIT_PROMPT_KIT_CONFLICTED`, `GIT_PROMPT_KIT_DELETED`, `GIT_PROMPT_KIT_MODIFIED`, `GIT_PROMPT_KIT_NEW`, `GIT_PROMPT_KIT_DELETED_STAGED`, and `GIT_PROMPT_KIT_MODIFIED_STAGED`
 `GIT_PROMPT_KIT_STATUS_EXTENDED` | prompt string | `GIT_PROMPT_KIT_STASHES`, `GIT_PROMPT_KIT_ASSUMED_UNCHANGED`, and `GIT_PROMPT_KIT_SKIP_WORKTREE`
-`GIT_PROMPT_KIT_WORKDIR` | prompt string | `GIT_PROMPT_KIT_ROOT` and `GIT_PROMPT_KIT_CWD`
 
 ### Other components
 

@@ -18,6 +18,7 @@ typeset -gi GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS=${GIT_PROMPT_KIT_SHOW_INACTIVE_S
 # Colors options
 GIT_PROMPT_KIT_COLOR_ACTION=${GIT_PROMPT_KIT_COLOR_ACTION-199}
 GIT_PROMPT_KIT_COLOR_ASSUME_UNCHANGED=${GIT_PROMPT_KIT_COLOR_ASSUME_UNCHANGED-81}
+GIT_PROMPT_KIT_COLOR_CWD=${GIT_PROMPT_KIT_COLOR_CWD-39}
 GIT_PROMPT_KIT_COLOR_FAILED=${GIT_PROMPT_KIT_COLOR_FAILED-88}
 GIT_PROMPT_KIT_COLOR_HEAD=${GIT_PROMPT_KIT_COLOR_HEAD-140}
 GIT_PROMPT_KIT_COLOR_HOST=${GIT_PROMPT_KIT_COLOR_HOST-109}
@@ -31,17 +32,16 @@ GIT_PROMPT_KIT_COLOR_SUCCEEDED=${GIT_PROMPT_KIT_COLOR_SUCCEEDED-76}
 GIT_PROMPT_KIT_COLOR_TAG=${GIT_PROMPT_KIT_COLOR_TAG-86}
 GIT_PROMPT_KIT_COLOR_UNSTAGED=${GIT_PROMPT_KIT_COLOR_UNSTAGED-162}
 GIT_PROMPT_KIT_COLOR_USER=${GIT_PROMPT_KIT_COLOR_USER-109}
-GIT_PROMPT_KIT_COLOR_WORKDIR=${GIT_PROMPT_KIT_COLOR_WORKDIR-39}
 
 # Configuration options
 typeset -g GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX=${GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX:-__git_prompt_kit}
 typeset -g GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME=${GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME:-GIT_PROMPT_KIT}
 
 # Content options
+GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT=${GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT-1}
 GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME=${GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME-upstream}
 GIT_PROMPT_KIT_DEFAULT_REMOTE_NAME=${GIT_PROMPT_KIT_DEFAULT_REMOTE_NAME-origin}
-GIT_PROMPT_KIT_CWD_TRAILING_COUNT=${GIT_PROMPT_KIT_CWD_TRAILING_COUNT-1}
-GIT_PROMPT_KIT_ROOT_TRAILING_COUNT=${GIT_PROMPT_KIT_ROOT_TRAILING_COUNT-1}
+GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT=${GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT-1}
 #
 ! [[ -v GIT_PROMPT_KIT_HIDDEN_HOSTS ]] && typeset -a GIT_PROMPT_KIT_HIDDEN_HOSTS=()
 ! [[ -v GIT_PROMPT_KIT_HIDDEN_USERS ]] && typeset -a GIT_PROMPT_KIT_HIDDEN_USERS=()
@@ -92,7 +92,7 @@ _git_prompt_kit_colors=(
   GIT_PROMPT_KIT_COLOR_TAG
   GIT_PROMPT_KIT_COLOR_UNSTAGED
   GIT_PROMPT_KIT_COLOR_USER
-  GIT_PROMPT_KIT_COLOR_WORKDIR
+  GIT_PROMPT_KIT_COLOR_CWD
 )
 
 typeset -ga _git_prompt_kit_configs
@@ -178,13 +178,14 @@ _git_prompt_kit_update_git() {
   typeset -g GIT_PROMPT_KIT_PUSH_BEHIND=
   typeset -g GIT_PROMPT_KIT_REF=
   typeset -g GIT_PROMPT_KIT_REMOTE=
+  typeset -g GIT_PROMPT_KIT_REPO_ROOT=
+  typeset -g GIT_PROMPT_KIT_REPO_SUBDIRECTORY=
   typeset -g GIT_PROMPT_KIT_SKIP_WORKTREE=
   typeset -g GIT_PROMPT_KIT_STASHES=
   typeset -g GIT_PROMPT_KIT_STATUS=
   typeset -g GIT_PROMPT_KIT_STATUS_EXTENDED=
   typeset -g GIT_PROMPT_KIT_TAG=
   typeset -g GIT_PROMPT_KIT_UNTRACKED=
-  typeset -g GIT_PROMPT_KIT_ROOT=
 
   gitstatus_query$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME || return 1  # error
   [[ $VCS_STATUS_RESULT == 'ok-sync' ]] || return 0  # not a git repo
@@ -206,7 +207,8 @@ _git_prompt_kit_update_git() {
   local color_workdir
   local ref_status=
   local tree_status=
-  local -a root_path_components
+  local -a repo_root_path_components
+  local -a repo_subdirectory_path_components
   local -i added_staged_count
   local -i show_ahead
   local -i show_behind
@@ -229,7 +231,7 @@ _git_prompt_kit_update_git() {
     color_stash=$GIT_PROMPT_KIT_COLOR_STASH
     color_tag=$GIT_PROMPT_KIT_COLOR_TAG
     color_unstaged=$GIT_PROMPT_KIT_COLOR_UNSTAGED
-    color_workdir=$GIT_PROMPT_KIT_COLOR_WORKDIR
+    color_workdir=$GIT_PROMPT_KIT_COLOR_CWD
   fi
 
   (( added_staged_count = VCS_STATUS_NUM_STAGED - VCS_STATUS_NUM_STAGED_NEW - VCS_STATUS_NUM_STAGED_DELETED ))
@@ -253,22 +255,41 @@ _git_prompt_kit_update_git() {
   (( show_push_ahead = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_AHEAD ))
   (( show_push_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_BEHIND ))
 
-  # Git directory
-  root_path_components=( ${(s./.)VCS_STATUS_WORKDIR} )
+  # Git repo directory
+  repo_root_path_components=( ${(s./.)VCS_STATUS_WORKDIR} )
 
-  if (( GIT_PROMPT_KIT_ROOT_TRAILING_COUNT + 1 >= ${#root_path_components} )) || (( GIT_PROMPT_KIT_ROOT_TRAILING_COUNT < 0 )); then
-    GIT_PROMPT_KIT_ROOT+=${(j./.)root_path_components[0,-2]}
+  # path segments above the repo root dir
+  if (( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT + 1 >= ${#repo_root_path_components} )) || (( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT < 0 )); then
+    GIT_PROMPT_KIT_REPO_ROOT+=${(j./.)repo_root_path_components[0,-2]}
   else
-    GIT_PROMPT_KIT_ROOT+=${(j./.)root_path_components[$(( -1 - GIT_PROMPT_KIT_ROOT_TRAILING_COUNT )),-2]}
+    GIT_PROMPT_KIT_REPO_ROOT+=${(j./.)repo_root_path_components[$(( -1 - GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT )),-2]}
   fi
 
-  if [[ -n $GIT_PROMPT_KIT_ROOT ]]; then
-    GIT_PROMPT_KIT_ROOT+="/"
+  # if there are path segments above the repo root dir, prefix the repo root dir with `/`
+  if [[ -n $GIT_PROMPT_KIT_REPO_ROOT ]]; then
+    GIT_PROMPT_KIT_REPO_ROOT+="/"
   fi
   
-  GIT_PROMPT_KIT_ROOT="%F{$color_workdir}$GIT_PROMPT_KIT_ROOT"
-  GIT_PROMPT_KIT_ROOT+="%U${root_path_components[-1]}%u"
-  GIT_PROMPT_KIT_ROOT+="%F{$color_inactive}"
+  # color the repo root path
+  GIT_PROMPT_KIT_REPO_ROOT="%F{$color_workdir}$GIT_PROMPT_KIT_REPO_ROOT"
+  # underline the repo root dir
+  GIT_PROMPT_KIT_REPO_ROOT+="%U${repo_root_path_components[-1]}%u"
+  GIT_PROMPT_KIT_REPO_ROOT+="%F{$color_inactive}"
+
+  # Git repo subdirectory
+  if [[ $VCS_STATUS_WORKDIR != $PWD ]]; then
+    repo_subdirectory_path_components=( ${(s./.)PWD##$VCS_STATUS_WORKDIR} )
+
+    GIT_PROMPT_KIT_REPO_SUBDIRECTORY+="%F{$color_workdir}"
+
+    if (( GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT + 1 >= ${#repo_subdirectory_path_components} )) || (( GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT < 0 )); then
+      GIT_PROMPT_KIT_REPO_SUBDIRECTORY+=${(j./.)repo_subdirectory_path_components[0,-1]}
+    else
+      GIT_PROMPT_KIT_REPO_SUBDIRECTORY+=.../${(j./.)repo_subdirectory_path_components[$(( -1 - GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT )),-1]}
+    fi
+
+    GIT_PROMPT_KIT_REPO_SUBDIRECTORY+="%F{$color_inactive}"
+  fi
 
   # Git tree status: stashes
 
@@ -550,14 +571,13 @@ _git_prompt_kit_update_nongit() {
   typeset -g GIT_PROMPT_KIT_CHAR=
   typeset -g GIT_PROMPT_KIT_CWD=
   typeset -g GIT_PROMPT_KIT_USERHOST=
-  typeset -g GIT_PROMPT_KIT_WORKDIR=
 
   local color_failed
   local color_host
   local color_inactive
   local color_succeeded
   local color_user
-  local color_workdir
+  local color_cwd
   local host=${(%):-%m}
   local user=${(%):-%n}
   local -a cwd_path_components
@@ -567,10 +587,10 @@ _git_prompt_kit_update_nongit() {
   if ! _git_prompt_kit_no_color; then
     color_failed=$GIT_PROMPT_KIT_COLOR_FAILED
     color_host=$GIT_PROMPT_KIT_COLOR_HOST
+    color_cwd=$GIT_PROMPT_KIT_COLOR_CWD
     color_inactive=$GIT_PROMPT_KIT_COLOR_INACTIVE
     color_succeeded=$GIT_PROMPT_KIT_COLOR_SUCCEEDED
     color_user=$GIT_PROMPT_KIT_COLOR_USER
-    color_workdir=$GIT_PROMPT_KIT_COLOR_WORKDIR
   fi
 
   # Prompt character: % if normal, # if root (has configurable colors for status code of the previous command)
@@ -592,31 +612,11 @@ _git_prompt_kit_update_nongit() {
     (( show_host )) && GIT_PROMPT_KIT_USERHOST+="%F{$color_host}${GIT_PROMPT_KIT_SYMBOL_HOST}%m%f"
   fi
 
-  GIT_PROMPT_KIT_CWD="%F{$color_workdir}%$(( GIT_PROMPT_KIT_CWD_TRAILING_COUNT + 1 ))~%f"
-
-  if [[ -n $GIT_PROMPT_KIT_ROOT ]]; then
-    GIT_PROMPT_KIT_CWD=
-    
-    if [[ $VCS_STATUS_WORKDIR != $PWD ]]; then
-      cwd_path_components=( ${(s./.)PWD##$VCS_STATUS_WORKDIR} )
-
-      GIT_PROMPT_KIT_CWD+="%F{$color_workdir}"
-
-      if (( GIT_PROMPT_KIT_CWD_TRAILING_COUNT + 1 >= ${#cwd_path_components} )) || (( GIT_PROMPT_KIT_CWD_TRAILING_COUNT < 0 )); then
-        GIT_PROMPT_KIT_CWD+=${(j./.)cwd_path_components[0,-1]}
-      else
-        GIT_PROMPT_KIT_CWD+=.../${(j./.)cwd_path_components[$(( -1 - GIT_PROMPT_KIT_CWD_TRAILING_COUNT )),-1]}
-      fi
-
-      GIT_PROMPT_KIT_CWD+="%F{$color_inactive}"
-    fi
+  if [[ -n $GIT_PROMPT_KIT_REPO_ROOT ]]; then
+    GIT_PROMPT_KIT_CWD="${GIT_PROMPT_KIT_REPO_ROOT}${GIT_PROMPT_KIT_REPO_SUBDIRECTORY:+/$GIT_PROMPT_KIT_REPO_SUBDIRECTORY}"
+  else
+    GIT_PROMPT_KIT_CWD="%F{$color_workdir}%$(( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT + 1 ))~%f%F{$color_inactive}"
   fi
-
-  GIT_PROMPT_KIT_WORKDIR+=$GIT_PROMPT_KIT_ROOT
-  if [[ -n $GIT_PROMPT_KIT_ROOT && -n $GIT_PROMPT_KIT_CWD ]]; then
-    GIT_PROMPT_KIT_WORKDIR+="%F{$color_workdir}/%F{$color_inactive}"
-  fi
-  GIT_PROMPT_KIT_WORKDIR+=$GIT_PROMPT_KIT_CWD
 }
 
 _git_prompt_kit_no_color() {

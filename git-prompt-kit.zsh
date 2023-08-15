@@ -400,7 +400,9 @@ _git_prompt_kit_update_git() {
           GIT_PROMPT_KIT_REMOTE+="%F{$color_remote}"
         fi
 
+        if (( triangular_workflow )); then
         GIT_PROMPT_KIT_REMOTE+="$GIT_PROMPT_KIT_SYMBOL_REMOTE"
+      fi
       fi
 
       if (( show_remote )); then

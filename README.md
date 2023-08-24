@@ -228,11 +228,11 @@ Name | Type | Description
 `GIT_PROMPT_KIT_BEHIND` | prompt string | Git: commits behind the upstream
 `GIT_PROMPT_KIT_CHAR` | prompt string | Prompt character
 `GIT_PROMPT_KIT_CONFLICTED` | prompt string | Git: conflicted files count
-`GIT_PROMPT_KIT_DELETED_STAGED` | prompt string | Git: staged deleted files count
 `GIT_PROMPT_KIT_DELETED` | prompt string | Git: unstaged deleted files count
+`GIT_PROMPT_KIT_DELETED_STAGED` | prompt string | Git: staged deleted files count
 `GIT_PROMPT_KIT_HEAD` | prompt string | Git: HEAD (branch or commit)
-`GIT_PROMPT_KIT_MODIFIED_STAGED` | prompt string | Git: staged modified files count
 `GIT_PROMPT_KIT_MODIFIED` | prompt string | Git: unstaged modified files count
+`GIT_PROMPT_KIT_MODIFIED_STAGED` | prompt string | Git: staged modified files count
 `GIT_PROMPT_KIT_NEW` | prompt string | Git: (staged) new files count
 `GIT_PROMPT_KIT_PUSH_AHEAD` | prompt string | Git: commits ahead of the push remote
 `GIT_PROMPT_KIT_PUSH_BEHIND` | prompt string | Git: commits behind the push remote

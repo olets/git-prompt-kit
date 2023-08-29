@@ -209,7 +209,7 @@ _git_prompt_kit_update_git() {
   local color_stash
   local color_tag
   local color_unstaged
-  local color_workdir
+  local color_repo
   local ref_status=
   local tree_status=
   local -a repo_root_path_components
@@ -236,7 +236,7 @@ _git_prompt_kit_update_git() {
     color_stash=$GIT_PROMPT_KIT_COLOR_STASH
     color_tag=$GIT_PROMPT_KIT_COLOR_TAG
     color_unstaged=$GIT_PROMPT_KIT_COLOR_UNSTAGED
-    color_workdir=$GIT_PROMPT_KIT_COLOR_CWD
+    color_repo=$GIT_PROMPT_KIT_COLOR_CWD
   fi
 
   (( added_staged_count = VCS_STATUS_NUM_STAGED - VCS_STATUS_NUM_STAGED_NEW - VCS_STATUS_NUM_STAGED_DELETED ))
@@ -276,7 +276,7 @@ _git_prompt_kit_update_git() {
   fi
   
   # color the repo root path
-  GIT_PROMPT_KIT_REPO_ROOT="%F{$color_workdir}$GIT_PROMPT_KIT_REPO_ROOT"
+  GIT_PROMPT_KIT_REPO_ROOT="%F{$color_repo}$GIT_PROMPT_KIT_REPO_ROOT"
   # underline the repo root dir
   GIT_PROMPT_KIT_REPO_ROOT+="%U${repo_root_path_components[-1]}%u"
   GIT_PROMPT_KIT_REPO_ROOT+="%F{$color_inactive}"
@@ -285,7 +285,7 @@ _git_prompt_kit_update_git() {
   if [[ $VCS_STATUS_WORKDIR != $PWD ]]; then
     repo_subdirectory_path_components=( ${(s./.)PWD##$VCS_STATUS_WORKDIR} )
 
-    GIT_PROMPT_KIT_REPO_SUBDIRECTORY+="%F{$color_workdir}"
+    GIT_PROMPT_KIT_REPO_SUBDIRECTORY+="%F{$color_repo}"
 
     if (( GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT + 1 >= ${#repo_subdirectory_path_components} )) || (( GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT < 0 )); then
       GIT_PROMPT_KIT_REPO_SUBDIRECTORY+=${(j./.)repo_subdirectory_path_components[0,-1]}
@@ -710,7 +710,7 @@ _git_prompt_kit_update_nongit() {
   if [[ -n $GIT_PROMPT_KIT_REPO_ROOT ]]; then
     GIT_PROMPT_KIT_CWD="${GIT_PROMPT_KIT_REPO_ROOT}${GIT_PROMPT_KIT_REPO_SUBDIRECTORY:+/$GIT_PROMPT_KIT_REPO_SUBDIRECTORY}"
   else
-    GIT_PROMPT_KIT_CWD="%F{$color_workdir}%$(( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT + 1 ))~%f%F{$color_inactive}"
+    GIT_PROMPT_KIT_CWD="%F{$color_cwd}%$(( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT + 1 ))~%f%F{$color_inactive}"
   fi
 }
 

@@ -725,6 +725,7 @@ _git_prompt_kit_no_color() {
   return $found
 }
 
+_git_prompt_kit_init() {
   # Source local gitstatus
   # Second param is added to gitstatus function names as a suffix
   'builtin' 'source' ${0:A:h}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX
@@ -748,3 +749,6 @@ _git_prompt_kit_no_color() {
   # Perform parameter expansion, command substitution and arithmetic expansion in the prompt,
   # and treat `%` specially
   'builtin' 'setopt' prompt_subst prompt_percent
+}
+
+_git_prompt_kit_init

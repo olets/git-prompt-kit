@@ -415,7 +415,7 @@ _git_prompt_kit_update_git() {
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || added_staged_count )); then
     GIT_PROMPT_KIT_MODIFIED_STAGED+="%F{$color_inactive}"
 
-    if(( added_staged_count )); then
+    if (( added_staged_count )); then
       GIT_PROMPT_KIT_MODIFIED_STAGED+="%F{$color_staged}$added_staged_count"
       GIT_PROMPT_KIT_DIRTY=1
     fi

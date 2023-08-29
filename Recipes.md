@@ -19,7 +19,7 @@ The Git Prompt Kit Spaceship section uses the default Git Prompt Kit's Git compo
 # Configure Spaceship
 SPACESHIP_PROMPT_ORDER=(
   # any other sections
-  git_prompt_kit
+  spaceship_git_prompt_kit
   # any other sections
 )
 

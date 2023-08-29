@@ -728,7 +728,7 @@ _git_prompt_kit_no_color() {
 _git_prompt_kit_init() {
   # Source local gitstatus
   # Second param is added to gitstatus function names as a suffix
-  'builtin' 'source' ${0:A:h}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX
+  'builtin' 'source' ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX
 
   # Start gitstatusd instance with name $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME. The same name is passed to
   # gitstatus_query in _git_prompt_kit_update_git. The flags with -1 as values
@@ -751,4 +751,5 @@ _git_prompt_kit_init() {
   'builtin' 'setopt' prompt_subst prompt_percent
 }
 
+typeset -g GIT_PROMPT_KIT_SOURCE_PATH=${0:A:h}
 _git_prompt_kit_init

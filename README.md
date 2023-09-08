@@ -8,6 +8,10 @@ Try the interactive demo! https://git-prompt-kit.netlify.app/
 
 &nbsp;
 
+> ⚠️ The following documentation goes with the latest _release_, and may be behind the `main` branch code.
+
+&nbsp;
+
 - [Installation](#installation)
 - [Default prompt](#default-prompt)
 - [Options](#options)

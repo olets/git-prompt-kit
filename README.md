@@ -6,6 +6,10 @@
 
 &nbsp;
 
+> This is the WIP branch for the next major version. **It may be force pushed.**
+
+&nbsp;
+
 ## Documentation
 
 <!-- TODO drop `next.` -->

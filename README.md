@@ -4,7 +4,7 @@
 
 **Git Prompt Kit** is a configurable set of components for creating feature rich, high performance Git-aware zsh prompts (aka themes) with minimal coding. It is built on gitstatus, the same accelerated `git status` alternative used by Powerlevel10k.
 
-Try the interactive demo! https://git-prompt-kit.netlify.app/
+Try the interactive demo! https://git-prompt-kit.olets.dev/
 
 &nbsp;
 
@@ -59,7 +59,7 @@ The Git Prompt Kit Spaceship section has been clocked at 50% faster than Spacesh
 
 ## Examples
 
-To get a feel for the components try the interactive demo: <a href="https://git-prompt-kit.netlify.app/">https://git-prompt-kit.netlify.app/</a>.
+To get a feel for the components try the interactive demo: <a href="https://git-prompt-kit.olets.dev/">https://git-prompt-kit.olets.dev/</a>.
 
 See [Recipes.md](Recipes.md) for code how to use Git Prompt Kit components to build a high-performance prompt styled after [git-radar](https://github.com/michaeldfallen/git-radar), [oh-my-git](https://github.com/arialdomartini/oh-my-git), [Pure](https://github.com/sindresorhus/pure), or [Spaceship](https://github.com/denysdovhan/spaceship-prompt).
 

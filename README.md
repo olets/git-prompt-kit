@@ -8,7 +8,7 @@ Try the interactive demo! https://git-prompt-kit.olets.dev/
 
 &nbsp;
 
-> 🎉 The next major version of Git Prompt Kit is in the works! It has brand new documentation site. Take a look in the [`v4` branch](https://github.com/olets/git-prompt-kit/tree/v4)
+> 🎉 The next major version of Git Prompt Kit is in the works, complete with a brand new documentation site. Take a look in the [`v4` branch](https://github.com/olets/git-prompt-kit/tree/v4)
 
 &nbsp;
 

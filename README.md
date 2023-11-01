@@ -1,19 +1,14 @@
 <img src="./img/git-prompt-kit.png" alt="">
 
-# Git Prompt Kit ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/olets/git-prompt-kit?include_prereleases&label=pre-release) ![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/olets/git-prompt-kit/latest?include_prereleases)
+# Git Prompt Kit ![GitHub release (latest by date)](https://img.shields.io/github/v/release/olets/git-prompt-kit) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/olets/git-prompt-kit/latest)
 
 **Git Prompt Kit** is a configurable set of components for building feature rich, high performance Git-aware zsh prompts (aka themes) with minimal coding.
 
 &nbsp;
 
-> This is the WIP branch for the next major version. **It may be force pushed.**
-
-&nbsp;
-
 ## Documentation
 
-<!-- TODO drop `next.` -->
-📖 See the guide, including a web simulation demonstrating how the prompt responds to context and configuration, at https://next.hometown-prompt.olets.dev/
+📖 See the guide, including a web simulation demonstrating how the prompt responds to context and configuration, at https://hometown-prompt.olets.dev/
 
 &nbsp;
 

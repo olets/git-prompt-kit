@@ -8,6 +8,10 @@ Try the interactive demo! https://git-prompt-kit.olets.dev/
 
 &nbsp;
 
+> 🎉 The next major version of Git Prompt Kit is in the works! It has brand new documentation site. Take a look in the [`#next` branch](https://github.com/olets/git-prompt-kit/tree/next)
+
+&nbsp;
+
 - [Installation](#installation)
 - [Default prompt](#default-prompt)
 - [Options](#options)

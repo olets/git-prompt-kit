@@ -274,7 +274,11 @@ _git_prompt_kit_update_git() {
   (( show_push_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_BEHIND ))
 
   # Git repo directory
-  repo_root_path_components=( ${(s./.)VCS_STATUS_WORKDIR} )
+  if [[ ${VCS_STATUS_WORKDIR#$HOME} != $VCS_STATUS_WORKDIR ]]; then
+    repo_root_path_components=( "~" ${(s./.)${VCS_STATUS_WORKDIR#$HOME}} )
+  else
+    repo_root_path_components=( ${(s./.)VCS_STATUS_WORKDIR} )
+  fi
 
   # path segments above the repo root dir
   if (( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT + 1 >= ${#repo_root_path_components} )) || (( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT < 0 )); then

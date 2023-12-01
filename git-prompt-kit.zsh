@@ -5,9 +5,6 @@
 # Nov 27 2022
 # https://github.com/olets/git-prompt-kit
 # Copyright (©) 2019-present Henry Bley-Vroman
-#
-# Forked from and requires gitstatus prompt
-# https://github.com/romkatv/gitstatus
 
 # Behavior options
 typeset -gi GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND=${GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND:-1}

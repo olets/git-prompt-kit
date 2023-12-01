@@ -2,7 +2,7 @@
 
 # Git Prompt Kit ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/olets/git-prompt-kit?include_prereleases&label=pre-release) ![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/olets/git-prompt-kit/latest?include_prereleases)
 
-**Git Prompt Kit** is a configurable set of components for creating feature rich, high performance Git-aware zsh prompts (aka themes) with minimal coding. It is built on gitstatus, the same accelerated `git status` alternative used by Powerlevel10k.
+**Git Prompt Kit** is a configurable set of components for building feature rich, high performance Git-aware zsh prompts (aka themes) with minimal coding.
 
 &nbsp;
 
@@ -56,7 +56,7 @@ Under the following terms
 
 The human-readable license summary is based on https://creativecommons.org/licenses/by-nc-sa/4.0. The ethics point was added.
 
-Git Prompt Kit is built on Roman Perepelitsa's [gitstatus](https://github.com/romkatv/gitstatus).
+Git Prompt Kit uses Roman Perepelitsa's [gitstatus](https://github.com/romkatv/gitstatus) accelerated alternative to Git's status commands.
 
 Showing "dimmed" components was inspired by Arialdo Martini's [oh-my-git](https://github.com/arialdomartini/oh-my-git), which leaves space for inactive symbols.
 

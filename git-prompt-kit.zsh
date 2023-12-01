@@ -6,6 +6,8 @@
 # https://github.com/olets/git-prompt-kit
 # Copyright (©) 2019-present Henry Bley-Vroman
 
+typeset -r GIT_PROMPT_KIT_VERSION="4.0.0"
+
 # Behavior options
 typeset -gi GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND=${GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND:-1}
 typeset -gi GIT_PROMPT_KIT_HIDE_INACTIVE_EXTENDED_STATUS=${GIT_PROMPT_KIT_HIDE_INACTIVE_EXTENDED_STATUS:-1}

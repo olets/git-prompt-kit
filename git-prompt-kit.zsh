@@ -5,9 +5,8 @@
 # Nov 27 2022
 # https://github.com/olets/git-prompt-kit
 # Copyright (©) 2019-present Henry Bley-Vroman
-#
-# Forked from and requires gitstatus prompt
-# https://github.com/romkatv/gitstatus
+
+typeset -r GIT_PROMPT_KIT_VERSION="4.0.0"
 
 # Behavior options
 typeset -gi GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND=${GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND:-1}
@@ -18,6 +17,7 @@ typeset -gi GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS=${GIT_PROMPT_KIT_SHOW_INACTIVE_S
 # Colors options
 GIT_PROMPT_KIT_COLOR_ACTION=${GIT_PROMPT_KIT_COLOR_ACTION-199}
 GIT_PROMPT_KIT_COLOR_ASSUME_UNCHANGED=${GIT_PROMPT_KIT_COLOR_ASSUME_UNCHANGED-81}
+GIT_PROMPT_KIT_COLOR_CWD=${GIT_PROMPT_KIT_COLOR_CWD-39}
 GIT_PROMPT_KIT_COLOR_FAILED=${GIT_PROMPT_KIT_COLOR_FAILED-88}
 GIT_PROMPT_KIT_COLOR_HEAD=${GIT_PROMPT_KIT_COLOR_HEAD-140}
 GIT_PROMPT_KIT_COLOR_HOST=${GIT_PROMPT_KIT_COLOR_HOST-109}
@@ -31,48 +31,63 @@ GIT_PROMPT_KIT_COLOR_SUCCEEDED=${GIT_PROMPT_KIT_COLOR_SUCCEEDED-76}
 GIT_PROMPT_KIT_COLOR_TAG=${GIT_PROMPT_KIT_COLOR_TAG-86}
 GIT_PROMPT_KIT_COLOR_UNSTAGED=${GIT_PROMPT_KIT_COLOR_UNSTAGED-162}
 GIT_PROMPT_KIT_COLOR_USER=${GIT_PROMPT_KIT_COLOR_USER-109}
-GIT_PROMPT_KIT_COLOR_WORKDIR=${GIT_PROMPT_KIT_COLOR_WORKDIR-39}
 
 # Configuration options
 typeset -g GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX=${GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX:-__git_prompt_kit}
 typeset -g GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME=${GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME:-GIT_PROMPT_KIT}
 
 # Content options
+GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT=${GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT-1}
 GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME=${GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME-upstream}
 GIT_PROMPT_KIT_DEFAULT_REMOTE_NAME=${GIT_PROMPT_KIT_DEFAULT_REMOTE_NAME-origin}
-GIT_PROMPT_KIT_CWD_TRAILING_COUNT=${GIT_PROMPT_KIT_CWD_TRAILING_COUNT-1}
-GIT_PROMPT_KIT_ROOT_TRAILING_COUNT=${GIT_PROMPT_KIT_ROOT_TRAILING_COUNT-1}
+GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT=${GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT-1}
 #
-! [[ -v GIT_PROMPT_KIT_HIDDEN_HOSTS ]] && typeset -a GIT_PROMPT_KIT_HIDDEN_HOSTS=()
-! [[ -v GIT_PROMPT_KIT_HIDDEN_USERS ]] && typeset -a GIT_PROMPT_KIT_HIDDEN_USERS=()
-#
-GIT_PROMPT_KIT_LOCAL=${GIT_PROMPT_KIT_LOCAL-local}
+if ! [[ -v GIT_PROMPT_KIT_HIDDEN_HOSTS ]]; then
+  typeset -a GIT_PROMPT_KIT_HIDDEN_HOSTS=()
+fi
 
-# Layout options
-typeset -gi GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF=${GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF:-1}
-typeset -gi GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF=${GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF:-1}
+if ! [[ -v GIT_PROMPT_KIT_HIDDEN_USERS ]]; then
+  typeset -a GIT_PROMPT_KIT_HIDDEN_USERS=()
+fi
 
 # Symbols options
-GIT_PROMPT_KIT_SYMBOL_AHEAD=${GIT_PROMPT_KIT_SYMBOL_AHEAD-+}
-GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED=${GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED-⥱ }
-GIT_PROMPT_KIT_SYMBOL_BEHIND=${GIT_PROMPT_KIT_SYMBOL_BEHIND--}
-GIT_PROMPT_KIT_SYMBOL_BRANCH=${GIT_PROMPT_KIT_SYMBOL_BRANCH-}
+GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS=${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS-}
+#
 GIT_PROMPT_KIT_SYMBOL_CHAR_NORMAL=${GIT_PROMPT_KIT_SYMBOL_CHAR_NORMAL-%%}
 GIT_PROMPT_KIT_SYMBOL_CHAR_ROOT=${GIT_PROMPT_KIT_SYMBOL_CHAR_ROOT-#}
-GIT_PROMPT_KIT_SYMBOL_COMMIT=${GIT_PROMPT_KIT_SYMBOL_COMMIT-}
-GIT_PROMPT_KIT_SYMBOL_CONFLICTED=${GIT_PROMPT_KIT_SYMBOL_CONFLICTED-UU}
-GIT_PROMPT_KIT_SYMBOL_DELETED=${GIT_PROMPT_KIT_SYMBOL_DELETED-_D}
-GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED=${GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED-D_}
-GIT_PROMPT_KIT_SYMBOL_HOST=${GIT_PROMPT_KIT_SYMBOL_HOST-@}
-GIT_PROMPT_KIT_SYMBOL_MODIFIED=${GIT_PROMPT_KIT_SYMBOL_MODIFIED-_M}
-GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED=${GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED-M_}
-GIT_PROMPT_KIT_SYMBOL_NEW=${GIT_PROMPT_KIT_SYMBOL_NEW-A_}
-GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE=${GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE-@{push}}
-GIT_PROMPT_KIT_SYMBOL_REMOTE=${GIT_PROMPT_KIT_SYMBOL_REMOTE-@{u}}
-GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE=${GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE-⤳}
-GIT_PROMPT_KIT_SYMBOL_STASH=${GIT_PROMPT_KIT_SYMBOL_STASH-⇲}
-GIT_PROMPT_KIT_SYMBOL_TAG=${GIT_PROMPT_KIT_SYMBOL_TAG-@}
-GIT_PROMPT_KIT_SYMBOL_UNTRACKED=${GIT_PROMPT_KIT_SYMBOL_UNTRACKED-??}
+GIT_PROMPT_KIT_SYMBOL_LOCAL=${GIT_PROMPT_KIT_SYMBOL_LOCAL-local}
+# Symbols which have verbose default variants
+GIT_PROMPT_KIT_SYMBOL_BRANCH=${GIT_PROMPT_KIT_SYMBOL_BRANCH-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+"branch: "}:-}}
+GIT_PROMPT_KIT_SYMBOL_COMMIT=${GIT_PROMPT_KIT_SYMBOL_COMMIT-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+"commit: "}:-}}
+GIT_PROMPT_KIT_SYMBOL_HOST=${GIT_PROMPT_KIT_SYMBOL_HOST-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" host: "}:-@}}
+GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE=${GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+"push-remote: "}:-@{push}}}
+GIT_PROMPT_KIT_SYMBOL_REMOTE=${GIT_PROMPT_KIT_SYMBOL_REMOTE-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+"remote: "}:-@{u}}}
+GIT_PROMPT_KIT_SYMBOL_TAG=${GIT_PROMPT_KIT_SYMBOL_TAG-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+"tag: "}:-@}}
+# Symbols which have verbose default and inactive variants
+GIT_PROMPT_KIT_SYMBOL_AHEAD=${GIT_PROMPT_KIT_SYMBOL_AHEAD-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+"ahead "}:-+}}
+GIT_PROMPT_KIT_SYMBOL_AHEAD_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_AHEAD_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_AHEAD%% }## }}
+GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED=${GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" assumed-unchanged"}:-⥱}}
+GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED%% }## }}
+GIT_PROMPT_KIT_SYMBOL_BEHIND=${GIT_PROMPT_KIT_SYMBOL_BEHIND-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+"behind "}:--}}
+GIT_PROMPT_KIT_SYMBOL_BEHIND_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_BEHIND_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_BEHIND%% }## }}
+GIT_PROMPT_KIT_SYMBOL_CONFLICTED=${GIT_PROMPT_KIT_SYMBOL_CONFLICTED-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" conflicted"}:-UU}}
+GIT_PROMPT_KIT_SYMBOL_CONFLICTED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_CONFLICTED_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_CONFLICTED%% }## }}
+GIT_PROMPT_KIT_SYMBOL_DELETED=${GIT_PROMPT_KIT_SYMBOL_DELETED-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" deleted"}:-_D}}
+GIT_PROMPT_KIT_SYMBOL_DELETED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_DELETED_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_DELETED%% }## }}
+GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED=${GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" staged-deleted"}:-D_}}
+GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED%% }## }}
+GIT_PROMPT_KIT_SYMBOL_MODIFIED=${GIT_PROMPT_KIT_SYMBOL_MODIFIED-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" modified"}:-_M}}
+GIT_PROMPT_KIT_SYMBOL_MODIFIED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_MODIFIED_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_MODIFIED%% }## }}
+GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED=${GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" modified-staged"}:-M_}}
+GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED%% }## }}
+GIT_PROMPT_KIT_SYMBOL_NEW=${GIT_PROMPT_KIT_SYMBOL_NEW-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" new"}:-A_}}
+GIT_PROMPT_KIT_SYMBOL_NEW_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_NEW_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_NEW%% }## }}
+GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE=${GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" skip-worktree"}:-⤳}}
+GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE%% }## }}
+GIT_PROMPT_KIT_SYMBOL_STASH=${GIT_PROMPT_KIT_SYMBOL_STASH-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" stashes"}:-⇲}}
+GIT_PROMPT_KIT_SYMBOL_STASH_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_STASH_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_STASH%% }## }}
+GIT_PROMPT_KIT_SYMBOL_UNTRACKED=${GIT_PROMPT_KIT_SYMBOL_UNTRACKED-${${GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS:+" untracked"}:-??}}
+GIT_PROMPT_KIT_SYMBOL_UNTRACKED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_UNTRACKED_INACTIVE-${${GIT_PROMPT_KIT_SYMBOL_UNTRACKED%% }## }}
 
 # END OF CONFIG VARIABLES
 
@@ -94,7 +109,7 @@ _git_prompt_kit_colors=(
   GIT_PROMPT_KIT_COLOR_TAG
   GIT_PROMPT_KIT_COLOR_UNSTAGED
   GIT_PROMPT_KIT_COLOR_USER
-  GIT_PROMPT_KIT_COLOR_WORKDIR
+  GIT_PROMPT_KIT_COLOR_CWD
 )
 
 typeset -ga _git_prompt_kit_configs
@@ -107,9 +122,6 @@ _git_prompt_kit_configs+=(
   GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND
   GIT_PROMPT_KIT_HIDE_INACTIVE_EXTENDED_STATUS
   GIT_PROMPT_KIT_HIDE_TOOL_NAMES
-  GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF
-  GIT_PROMPT_KIT_LOCAL
-  GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF
   GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS
   GIT_PROMPT_KIT_SYMBOL_AHEAD
   GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED
@@ -122,6 +134,7 @@ _git_prompt_kit_configs+=(
   GIT_PROMPT_KIT_SYMBOL_DELETED
   GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED
   GIT_PROMPT_KIT_SYMBOL_HOST
+  GIT_PROMPT_KIT_SYMBOL_LOCAL
   GIT_PROMPT_KIT_SYMBOL_MODIFIED
   GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED
   GIT_PROMPT_KIT_SYMBOL_NEW
@@ -129,6 +142,7 @@ _git_prompt_kit_configs+=(
   GIT_PROMPT_KIT_SYMBOL_STASH
   GIT_PROMPT_KIT_SYMBOL_TAG
   GIT_PROMPT_KIT_SYMBOL_UNTRACKED
+  GIT_PROMPT_KIT_VERBOSE_DEFAULT_SYMBOLS
 )
 
 git-prompt-kit-colors() {
@@ -181,16 +195,14 @@ _git_prompt_kit_update_git() {
   typeset -g GIT_PROMPT_KIT_PUSH_BEHIND=
   typeset -g GIT_PROMPT_KIT_REF=
   typeset -g GIT_PROMPT_KIT_REMOTE=
+  typeset -g GIT_PROMPT_KIT_REPO_ROOT=
+  typeset -g GIT_PROMPT_KIT_REPO_SUBDIRECTORY=
   typeset -g GIT_PROMPT_KIT_SKIP_WORKTREE=
   typeset -g GIT_PROMPT_KIT_STASHES=
   typeset -g GIT_PROMPT_KIT_STATUS=
   typeset -g GIT_PROMPT_KIT_STATUS_EXTENDED=
   typeset -g GIT_PROMPT_KIT_TAG=
   typeset -g GIT_PROMPT_KIT_UNTRACKED=
-  typeset -g GIT_PROMPT_KIT_ROOT=
-
-  (( GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF )) || typeset -g GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF=
-  (( GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF )) || typeset -g GIT_PROMPT_KIT_NO_LINEBREAK_BEFORE_GIT_REF=
 
   gitstatus_query$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME || return 1  # error
   [[ $VCS_STATUS_RESULT == 'ok-sync' ]] || return 0  # not a git repo
@@ -209,16 +221,16 @@ _git_prompt_kit_update_git() {
   local color_stash
   local color_tag
   local color_unstaged
-  local color_workdir
+  local color_repo
   local ref_status=
   local tree_status=
-  local -a root_path_components
+  local -a repo_root_path_components
+  local -a repo_subdirectory_path_components
   local -i added_staged_count
   local -i show_ahead
   local -i show_behind
   local -i show_push_ahead
   local -i show_push_behind
-  local -i show_push_remote
   local -i show_remote
   local -i show_remote_branch
   local -i triangular_workflow
@@ -236,7 +248,7 @@ _git_prompt_kit_update_git() {
     color_stash=$GIT_PROMPT_KIT_COLOR_STASH
     color_tag=$GIT_PROMPT_KIT_COLOR_TAG
     color_unstaged=$GIT_PROMPT_KIT_COLOR_UNSTAGED
-    color_workdir=$GIT_PROMPT_KIT_COLOR_WORKDIR
+    color_repo=$GIT_PROMPT_KIT_COLOR_CWD
   fi
 
   (( added_staged_count = VCS_STATUS_NUM_STAGED - VCS_STATUS_NUM_STAGED_NEW - VCS_STATUS_NUM_STAGED_DELETED ))
@@ -253,10 +265,6 @@ _git_prompt_kit_update_git() {
   if [[ -n $VCS_STATUS_PUSH_REMOTE_NAME ]] && [[ $VCS_STATUS_PUSH_REMOTE_NAME != $VCS_STATUS_REMOTE_NAME ]]; then
     triangular_workflow=1
   fi
-
-  if (( triangular_workflow )) && [[ $VCS_STATUS_PUSH_REMOTE_NAME != $GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME ]]; then
-    show_push_remote=1
-  fi
   
   (( show_ahead = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_COMMITS_AHEAD ))
   (( show_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_COMMITS_BEHIND ))
@@ -264,97 +272,201 @@ _git_prompt_kit_update_git() {
   (( show_push_ahead = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_AHEAD ))
   (( show_push_behind = ! GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND || VCS_STATUS_PUSH_COMMITS_BEHIND ))
 
-  # Git directory
-
-  GIT_PROMPT_KIT_ROOT+="%F{$color_workdir}"
-  root_path_components=( ${(s./.)VCS_STATUS_WORKDIR} )
-
-  if (( GIT_PROMPT_KIT_ROOT_TRAILING_COUNT + 1 >= ${#root_path_components} )) || (( GIT_PROMPT_KIT_ROOT_TRAILING_COUNT < 0 )); then
-    GIT_PROMPT_KIT_ROOT+=${(j./.)root_path_components[0,-2]}
+  # Git repo directory
+  if [[ ${VCS_STATUS_WORKDIR#$HOME} != $VCS_STATUS_WORKDIR ]]; then
+    repo_root_path_components=( "~" ${(s./.)${VCS_STATUS_WORKDIR#$HOME}} )
   else
-    GIT_PROMPT_KIT_ROOT+=${(j./.)root_path_components[$(( -1 - GIT_PROMPT_KIT_ROOT_TRAILING_COUNT )),-2]}
+    repo_root_path_components=( ${(s./.)VCS_STATUS_WORKDIR} )
   fi
-  GIT_PROMPT_KIT_ROOT+="/%U${root_path_components[-1]}%u"
-  GIT_PROMPT_KIT_ROOT+="%F{$color_inactive}"
+
+  # path segments above the repo root dir
+  if (( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT + 1 >= ${#repo_root_path_components} )) || (( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT < 0 )); then
+    GIT_PROMPT_KIT_REPO_ROOT+=${(j./.)repo_root_path_components[0,-2]}
+  else
+    GIT_PROMPT_KIT_REPO_ROOT+=${(j./.)repo_root_path_components[$(( -1 - GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT )),-2]}
+  fi
+
+  # if there are path segments above the repo root dir, prefix the repo root dir with `/`
+  if [[ -n $GIT_PROMPT_KIT_REPO_ROOT ]]; then
+    GIT_PROMPT_KIT_REPO_ROOT+="/"
+  fi
+  
+  # color the repo root path
+  GIT_PROMPT_KIT_REPO_ROOT="%F{$color_repo}$GIT_PROMPT_KIT_REPO_ROOT"
+  # underline the repo root dir
+  GIT_PROMPT_KIT_REPO_ROOT+="%U${repo_root_path_components[-1]}%u"
+  GIT_PROMPT_KIT_REPO_ROOT+="%F{$color_inactive}"
+
+  # Git repo subdirectory
+  if [[ $VCS_STATUS_WORKDIR != $PWD ]]; then
+    repo_subdirectory_path_components=( ${(s./.)PWD##$VCS_STATUS_WORKDIR} )
+
+    GIT_PROMPT_KIT_REPO_SUBDIRECTORY+="%F{$color_repo}"
+
+    if (( GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT + 1 >= ${#repo_subdirectory_path_components} )) || (( GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT < 0 )); then
+      GIT_PROMPT_KIT_REPO_SUBDIRECTORY+=${(j./.)repo_subdirectory_path_components[0,-1]}
+    else
+      GIT_PROMPT_KIT_REPO_SUBDIRECTORY+=.../${(j./.)repo_subdirectory_path_components[$(( -1 - GIT_PROMPT_KIT_REPO_SUBDIRECTORY_MAX_TRAILING_COUNT )),-1]}
+    fi
+
+    GIT_PROMPT_KIT_REPO_SUBDIRECTORY+="%F{$color_inactive}"
+  fi
 
   # Git tree status: stashes
 
   if (( ! GIT_PROMPT_KIT_HIDE_INACTIVE_EXTENDED_STATUS || VCS_STATUS_STASHES )); then
     GIT_PROMPT_KIT_STASHES+="%F{$color_inactive}"
-    (( VCS_STATUS_STASHES )) && GIT_PROMPT_KIT_STASHES+="%F{$color_stash}$VCS_STATUS_STASHES"
-    GIT_PROMPT_KIT_STASHES+="$GIT_PROMPT_KIT_SYMBOL_STASH%F{$color_inactive}"
+    
+    if (( VCS_STATUS_STASHES )); then
+      GIT_PROMPT_KIT_STASHES+="%F{$color_stash}$VCS_STATUS_STASHES"
+      GIT_PROMPT_KIT_STASHES+="$GIT_PROMPT_KIT_SYMBOL_STASH"
+    else
+      GIT_PROMPT_KIT_STASHES+="${GIT_PROMPT_KIT_SYMBOL_STASH_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_STASHES+="%F{$color_inactive}"
   fi
 
   # Git tree status: files with the assume-unchanged bit set
 
   if (( ! GIT_PROMPT_KIT_HIDE_INACTIVE_EXTENDED_STATUS || VCS_STATUS_NUM_ASSUME_UNCHANGED )); then
     GIT_PROMPT_KIT_ASSUMED_UNCHANGED+="%F{$color_inactive}"
-    (( VCS_STATUS_NUM_ASSUME_UNCHANGED )) && GIT_PROMPT_KIT_ASSUMED_UNCHANGED+="%F{$color_assume_unchanged}$VCS_STATUS_NUM_ASSUME_UNCHANGED"
-    GIT_PROMPT_KIT_ASSUMED_UNCHANGED+="$GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED%F{$color_inactive}"
+    
+    if (( VCS_STATUS_NUM_ASSUME_UNCHANGED )); then
+      GIT_PROMPT_KIT_ASSUMED_UNCHANGED+="%F{$color_assume_unchanged}$VCS_STATUS_NUM_ASSUME_UNCHANGED"
+      GIT_PROMPT_KIT_ASSUMED_UNCHANGED+="$GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED"
+    else
+      GIT_PROMPT_KIT_ASSUMED_UNCHANGED+="${GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_ASSUMED_UNCHANGED+="%F{$color_inactive}"
   fi
 
   # Git tree status: files with the skip-worktree bit set
 
   if (( ! GIT_PROMPT_KIT_HIDE_INACTIVE_EXTENDED_STATUS || VCS_STATUS_NUM_SKIP_WORKTREE )); then
     GIT_PROMPT_KIT_SKIP_WORKTREE+="%F{$color_inactive}"
-    (( VCS_STATUS_NUM_SKIP_WORKTREE )) && GIT_PROMPT_KIT_SKIP_WORKTREE+="%F{$color_skip_worktree}$VCS_STATUS_NUM_SKIP_WORKTREE"
-    GIT_PROMPT_KIT_SKIP_WORKTREE+="$GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE%F{$color_inactive}"
+    
+    if (( VCS_STATUS_NUM_SKIP_WORKTREE )); then
+      GIT_PROMPT_KIT_SKIP_WORKTREE+="%F{$color_skip_worktree}$VCS_STATUS_NUM_SKIP_WORKTREE"
+      GIT_PROMPT_KIT_SKIP_WORKTREE+="$GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE"
+    else
+      GIT_PROMPT_KIT_SKIP_WORKTREE+="${GIT_PROMPT_KIT_SYMBOL_SKIP_WORKTREE_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_SKIP_WORKTREE+="%F{$color_inactive}"
   fi
 
   # Git tree status: untracked (new) files
 
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || VCS_STATUS_NUM_UNTRACKED )); then
     GIT_PROMPT_KIT_UNTRACKED+="%F{$color_inactive}"
-    (( VCS_STATUS_NUM_UNTRACKED )) && GIT_PROMPT_KIT_UNTRACKED+="%F{$color_unstaged}$VCS_STATUS_NUM_UNTRACKED" && GIT_PROMPT_KIT_DIRTY=1
-    GIT_PROMPT_KIT_UNTRACKED+="$GIT_PROMPT_KIT_SYMBOL_UNTRACKED%F{$color_inactive}"
+
+    if (( VCS_STATUS_NUM_UNTRACKED )); then
+      GIT_PROMPT_KIT_UNTRACKED+="%F{$color_unstaged}$VCS_STATUS_NUM_UNTRACKED"
+      GIT_PROMPT_KIT_UNTRACKED+="$GIT_PROMPT_KIT_SYMBOL_UNTRACKED"
+      GIT_PROMPT_KIT_DIRTY=1
+    else
+      GIT_PROMPT_KIT_UNTRACKED+="${GIT_PROMPT_KIT_SYMBOL_UNTRACKED_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_UNTRACKED+="%F{$color_inactive}"
   fi
 
   # Git tree status: conflicted files
 
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || VCS_STATUS_NUM_CONFLICTED )); then
     GIT_PROMPT_KIT_CONFLICTED+="%F{$color_inactive}"
-    (( VCS_STATUS_NUM_CONFLICTED )) && GIT_PROMPT_KIT_CONFLICTED+="%F{$color_unstaged}$VCS_STATUS_NUM_CONFLICTED" && GIT_PROMPT_KIT_DIRTY=1
-    GIT_PROMPT_KIT_CONFLICTED+="$GIT_PROMPT_KIT_SYMBOL_CONFLICTED%F{$color_inactive}"
+    
+    if (( VCS_STATUS_NUM_CONFLICTED )); then
+      GIT_PROMPT_KIT_CONFLICTED+="%F{$color_unstaged}$VCS_STATUS_NUM_CONFLICTED"
+      GIT_PROMPT_KIT_CONFLICTED+="$GIT_PROMPT_KIT_SYMBOL_CONFLICTED"
+      GIT_PROMPT_KIT_DIRTY=1
+    else
+      GIT_PROMPT_KIT_CONFLICTED+="${GIT_PROMPT_KIT_SYMBOL_CONFLICTED_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_CONFLICTED+="%F{$color_inactive}"
   fi
 
   # Git tree status: unstaged deleted files
 
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || VCS_STATUS_NUM_UNSTAGED_DELETED )); then
     GIT_PROMPT_KIT_DELETED+="%F{$color_inactive}"
-    (( VCS_STATUS_NUM_UNSTAGED_DELETED )) && GIT_PROMPT_KIT_DELETED+="%F{$color_unstaged}$VCS_STATUS_NUM_UNSTAGED_DELETED" && GIT_PROMPT_KIT_DIRTY=1
-    GIT_PROMPT_KIT_DELETED+="$GIT_PROMPT_KIT_SYMBOL_DELETED%F{$color_inactive}"
+
+    if (( VCS_STATUS_NUM_UNSTAGED_DELETED )); then
+      GIT_PROMPT_KIT_DELETED+="%F{$color_unstaged}$VCS_STATUS_NUM_UNSTAGED_DELETED"
+      GIT_PROMPT_KIT_DELETED+="$GIT_PROMPT_KIT_SYMBOL_DELETED"
+      GIT_PROMPT_KIT_DIRTY=1
+    else
+      GIT_PROMPT_KIT_DELETED+="${GIT_PROMPT_KIT_SYMBOL_DELETED_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_DELETED+="%F{$color_inactive}"
   fi
 
   # Git tree status: unstaged modified files
 
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || unstaged_count )); then
     GIT_PROMPT_KIT_MODIFIED+="%F{$color_inactive}"
-    (( unstaged_count )) && GIT_PROMPT_KIT_MODIFIED+="%F{$color_unstaged}$unstaged_count" && GIT_PROMPT_KIT_DIRTY=1
-    GIT_PROMPT_KIT_MODIFIED+="$GIT_PROMPT_KIT_SYMBOL_MODIFIED%F{$color_inactive}"
+
+    if (( unstaged_count )); then
+      GIT_PROMPT_KIT_MODIFIED+="%F{$color_unstaged}$unstaged_count"
+      GIT_PROMPT_KIT_MODIFIED+="$GIT_PROMPT_KIT_SYMBOL_MODIFIED"
+      GIT_PROMPT_KIT_DIRTY=1
+    else
+      GIT_PROMPT_KIT_MODIFIED+="${GIT_PROMPT_KIT_SYMBOL_MODIFIED_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_MODIFIED+="%F{$color_inactive}"
   fi
 
   # Git tree status: staged new files
 
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || VCS_STATUS_NUM_STAGED_NEW )); then
     GIT_PROMPT_KIT_NEW+="%F{$color_inactive}"
-    (( VCS_STATUS_NUM_STAGED_NEW )) && GIT_PROMPT_KIT_NEW+="%F{$color_staged}$VCS_STATUS_NUM_STAGED_NEW" && GIT_PROMPT_KIT_DIRTY=1
-    GIT_PROMPT_KIT_NEW+="$GIT_PROMPT_KIT_SYMBOL_NEW%F{$color_inactive}"
+
+    if (( VCS_STATUS_NUM_STAGED_NEW )); then
+      GIT_PROMPT_KIT_NEW+="%F{$color_staged}$VCS_STATUS_NUM_STAGED_NEW"
+      GIT_PROMPT_KIT_NEW+="$GIT_PROMPT_KIT_SYMBOL_NEW"
+      GIT_PROMPT_KIT_DIRTY=1
+    else
+      GIT_PROMPT_KIT_NEW+="${GIT_PROMPT_KIT_SYMBOL_NEW_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_NEW+="%F{$color_inactive}"
   fi
 
   # Git tree status: staged deleted files
 
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || VCS_STATUS_NUM_STAGED_DELETED )); then
     GIT_PROMPT_KIT_DELETED_STAGED+="%F{$color_inactive}"
-    (( VCS_STATUS_NUM_STAGED_DELETED )) && GIT_PROMPT_KIT_DELETED_STAGED+="%F{$color_staged}$VCS_STATUS_NUM_STAGED_DELETED" && GIT_PROMPT_KIT_DIRTY=1
-    GIT_PROMPT_KIT_DELETED_STAGED+="$GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED%F{$color_inactive}"
+    
+    if (( VCS_STATUS_NUM_STAGED_DELETED )); then
+      GIT_PROMPT_KIT_DELETED_STAGED+="%F{$color_staged}$VCS_STATUS_NUM_STAGED_DELETED"
+      GIT_PROMPT_KIT_DELETED_STAGED+="$GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED"
+      GIT_PROMPT_KIT_DIRTY=1
+    else
+      GIT_PROMPT_KIT_DELETED_STAGED+="${GIT_PROMPT_KIT_SYMBOL_DELETED_STAGED_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_DELETED_STAGED+="%F{$color_inactive}"
   fi
 
   # Git tree status: staged modified files
 
   if (( GIT_PROMPT_KIT_SHOW_INACTIVE_STATUS || added_staged_count )); then
     GIT_PROMPT_KIT_MODIFIED_STAGED+="%F{$color_inactive}"
-    (( added_staged_count )) && GIT_PROMPT_KIT_MODIFIED_STAGED+="%F{$color_staged}$added_staged_count" && GIT_PROMPT_KIT_DIRTY=1
-    GIT_PROMPT_KIT_MODIFIED_STAGED+="$GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED%F{$color_inactive}"
+
+    if (( added_staged_count )); then
+      GIT_PROMPT_KIT_MODIFIED_STAGED+="%F{$color_staged}$added_staged_count"
+      GIT_PROMPT_KIT_MODIFIED_STAGED+="$GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED"
+      GIT_PROMPT_KIT_DIRTY=1
+    else
+      GIT_PROMPT_KIT_MODIFIED_STAGED+="${GIT_PROMPT_KIT_SYMBOL_MODIFIED_STAGED_INACTIVE}"
+    fi
+
+    GIT_PROMPT_KIT_MODIFIED_STAGED+="%F{$color_inactive}"
   fi
 
   # Git ref status: colorize if Git status is dirty
@@ -377,7 +489,7 @@ _git_prompt_kit_update_git() {
     GIT_PROMPT_KIT_HEAD+="$GIT_PROMPT_KIT_SYMBOL_BRANCH$VCS_STATUS_LOCAL_BRANCH%F{$color_inactive}"
 
     if [[ -z $VCS_STATUS_REMOTE_BRANCH ]] && (( ! triangular_workflow )); then 
-      GIT_PROMPT_KIT_REMOTE+="%F{$color_remote}$GIT_PROMPT_KIT_LOCAL%F{$color_inactive}"
+      GIT_PROMPT_KIT_REMOTE+="%F{$color_remote}$GIT_PROMPT_KIT_SYMBOL_LOCAL%F{$color_inactive}"
     fi
 
     if [[ -n $VCS_STATUS_REMOTE_BRANCH ]]; then
@@ -386,7 +498,9 @@ _git_prompt_kit_update_git() {
           GIT_PROMPT_KIT_REMOTE+="%F{$color_remote}"
         fi
 
-        GIT_PROMPT_KIT_REMOTE+="$GIT_PROMPT_KIT_SYMBOL_REMOTE"
+        if (( triangular_workflow )); then
+          GIT_PROMPT_KIT_REMOTE+="$GIT_PROMPT_KIT_SYMBOL_REMOTE"
+        fi
       fi
 
       if (( show_remote )); then
@@ -406,16 +520,30 @@ _git_prompt_kit_update_git() {
       fi
 
       if (( show_ahead )); then
-        (( VCS_STATUS_COMMITS_AHEAD && ! triangular_workflow )) && GIT_PROMPT_KIT_AHEAD+="%F{$color_remote}"
+        if (( VCS_STATUS_COMMITS_AHEAD && ! triangular_workflow )); then
+          GIT_PROMPT_KIT_AHEAD+="%F{$color_remote}"
+        fi
+
         GIT_PROMPT_KIT_AHEAD+="$GIT_PROMPT_KIT_SYMBOL_AHEAD"
-        (( VCS_STATUS_COMMITS_AHEAD )) && GIT_PROMPT_KIT_AHEAD+="$VCS_STATUS_COMMITS_AHEAD"
+
+        if (( VCS_STATUS_COMMITS_AHEAD )); then
+          GIT_PROMPT_KIT_AHEAD+="$VCS_STATUS_COMMITS_AHEAD"
+        fi
+
         GIT_PROMPT_KIT_AHEAD+="%F{$color_inactive}"
       fi
 
       if (( show_behind )); then
-        (( VCS_STATUS_COMMITS_BEHIND )) && GIT_PROMPT_KIT_BEHIND+="%F{$color_remote}"
+        if (( VCS_STATUS_COMMITS_BEHIND )); then
+          GIT_PROMPT_KIT_BEHIND+="%F{$color_remote}"
+        fi
+
         GIT_PROMPT_KIT_BEHIND+="$GIT_PROMPT_KIT_SYMBOL_BEHIND"
-        (( VCS_STATUS_COMMITS_BEHIND )) && GIT_PROMPT_KIT_BEHIND+="$VCS_STATUS_COMMITS_BEHIND"
+
+        if (( VCS_STATUS_COMMITS_BEHIND )); then
+          GIT_PROMPT_KIT_BEHIND+="$VCS_STATUS_COMMITS_BEHIND"
+        fi
+
         GIT_PROMPT_KIT_BEHIND+="%F{$color_inactive}"
       fi
     fi
@@ -425,7 +553,7 @@ _git_prompt_kit_update_git() {
         GIT_PROMPT_KIT_PUSH+="%F{$color_push_remote}"
       fi
 
-      if (( show_push_remote )); then
+      if [[ $VCS_STATUS_PUSH_REMOTE_NAME != $GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME ]]; then
         GIT_PROMPT_KIT_PUSH+="$GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE$VCS_STATUS_PUSH_REMOTE_NAME"
       fi
 
@@ -434,16 +562,30 @@ _git_prompt_kit_update_git() {
       # push remote branch would go here
 
       if (( show_push_ahead )); then
-        (( VCS_STATUS_PUSH_COMMITS_AHEAD )) && GIT_PROMPT_KIT_PUSH_AHEAD+="%F{$color_push_remote}"
+        if (( VCS_STATUS_PUSH_COMMITS_AHEAD )); then
+          GIT_PROMPT_KIT_PUSH_AHEAD+="%F{$color_push_remote}"
+        fi
+
         GIT_PROMPT_KIT_PUSH_AHEAD+="$GIT_PROMPT_KIT_SYMBOL_AHEAD"
-        (( VCS_STATUS_PUSH_COMMITS_AHEAD )) && GIT_PROMPT_KIT_PUSH_AHEAD+="$VCS_STATUS_PUSH_COMMITS_AHEAD"
-        GIT_PROMPT_KIT_AHEAD+="%F{$color_inactive}"
+
+        if (( VCS_STATUS_PUSH_COMMITS_AHEAD )); then
+          GIT_PROMPT_KIT_PUSH_AHEAD+="$VCS_STATUS_PUSH_COMMITS_AHEAD"
+        fi
+
+        GIT_PROMPT_KIT_PUSH_AHEAD+="%F{$color_inactive}"
       fi
 
       if (( show_push_behind )); then
-        (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && GIT_PROMPT_KIT_PUSH_BEHIND+="%F{$color_push_remote}"
+        if (( VCS_STATUS_PUSH_COMMITS_BEHIND )); then
+          GIT_PROMPT_KIT_PUSH_BEHIND+="%F{$color_push_remote}"
+        fi
+
         GIT_PROMPT_KIT_PUSH_BEHIND+="$GIT_PROMPT_KIT_SYMBOL_BEHIND"
-        (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && GIT_PROMPT_KIT_PUSH_BEHIND+="$VCS_STATUS_PUSH_COMMITS_BEHIND"
+
+        if (( VCS_STATUS_PUSH_COMMITS_BEHIND )); then
+          GIT_PROMPT_KIT_PUSH_BEHIND+="$VCS_STATUS_PUSH_COMMITS_BEHIND"
+        fi
+
         GIT_PROMPT_KIT_PUSH_BEHIND+="%F{$color_inactive}"
       fi
     fi
@@ -452,24 +594,32 @@ _git_prompt_kit_update_git() {
   fi
 
   # Git ref status: tag
-
-  [[ -n $VCS_STATUS_TAG ]] && GIT_PROMPT_KIT_TAG+="%F{$color_tag}$GIT_PROMPT_KIT_SYMBOL_TAG$VCS_STATUS_TAG%F{$color_inactive}"
+  if [[ -n $VCS_STATUS_TAG ]]; then
+    GIT_PROMPT_KIT_TAG+="%F{$color_tag}$GIT_PROMPT_KIT_SYMBOL_TAG$VCS_STATUS_TAG%F{$color_inactive}"
+  fi
 
   # Git action (e.g. rebasing)
-
-  [[ -n $VCS_STATUS_ACTION ]] && GIT_PROMPT_KIT_ACTION+="%F{$color_action}$VCS_STATUS_ACTION%F{$color_inactive}"
+  if [[ -n $VCS_STATUS_ACTION ]]; then
+    GIT_PROMPT_KIT_ACTION+="%F{$color_action}$VCS_STATUS_ACTION%F{$color_inactive}"
+  fi
 
   # Git "extended" status: stashes, assume-unchanged, skip-worktree
 
   GIT_PROMPT_KIT_STATUS_EXTENDED="${GIT_PROMPT_KIT_STASHES:+$GIT_PROMPT_KIT_STASHES}"
 
   if [[ -n $GIT_PROMPT_KIT_ASSUMED_UNCHANGED ]]; then
-    [[ -n $GIT_PROMPT_KIT_STATUS_EXTENDED ]] && GIT_PROMPT_KIT_STATUS_EXTENDED+=${GIT_PROMPT_KIT_STATUS_EXTENDED:+ }
+    if [[ -n $GIT_PROMPT_KIT_STATUS_EXTENDED ]]; then
+      GIT_PROMPT_KIT_STATUS_EXTENDED+=${GIT_PROMPT_KIT_STATUS_EXTENDED:+ }
+    fi
+
     GIT_PROMPT_KIT_STATUS_EXTENDED+=$GIT_PROMPT_KIT_ASSUMED_UNCHANGED
   fi
 
   if [[ -n $GIT_PROMPT_KIT_SKIP_WORKTREE ]]; then
-    [[ -n $GIT_PROMPT_KIT_STATUS_EXTENDED ]] && GIT_PROMPT_KIT_STATUS_EXTENDED+=${GIT_PROMPT_KIT_STATUS_EXTENDED:+ }
+    if [[ -n $GIT_PROMPT_KIT_STATUS_EXTENDED ]]; then
+      GIT_PROMPT_KIT_STATUS_EXTENDED+=${GIT_PROMPT_KIT_STATUS_EXTENDED:+ }
+    fi
+
     GIT_PROMPT_KIT_STATUS_EXTENDED+=$GIT_PROMPT_KIT_SKIP_WORKTREE
   fi
 
@@ -546,12 +696,6 @@ _git_prompt_kit_update_git() {
     GIT_PROMPT_KIT_REF+=$GIT_PROMPT_KIT_TAG
   fi
 
-  if (( GIT_PROMPT_KIT_LINEBREAK_AFTER_GIT_REF )); then
-    GIT_PROMPT_KIT_REF+=${GIT_PROMPT_KIT_REF:+$'\n'}
-  else
-    GIT_PROMPT_KIT_REF+=${GIT_PROMPT_KIT_REF:+ }
-  fi
-
   # Git ref: optionally prefix prompt
 
   (( GIT_PROMPT_KIT_HIDE_TOOL_NAMES )) || GIT_PROMPT_KIT_REF="Git $GIT_PROMPT_KIT_REF"
@@ -563,14 +707,13 @@ _git_prompt_kit_update_nongit() {
   typeset -g GIT_PROMPT_KIT_CHAR=
   typeset -g GIT_PROMPT_KIT_CWD=
   typeset -g GIT_PROMPT_KIT_USERHOST=
-  typeset -g GIT_PROMPT_KIT_WORKDIR=
 
   local color_failed
   local color_host
   local color_inactive
   local color_succeeded
   local color_user
-  local color_workdir
+  local color_cwd
   local host=${(%):-%m}
   local user=${(%):-%n}
   local -a cwd_path_components
@@ -580,10 +723,10 @@ _git_prompt_kit_update_nongit() {
   if ! _git_prompt_kit_no_color; then
     color_failed=$GIT_PROMPT_KIT_COLOR_FAILED
     color_host=$GIT_PROMPT_KIT_COLOR_HOST
+    color_cwd=$GIT_PROMPT_KIT_COLOR_CWD
     color_inactive=$GIT_PROMPT_KIT_COLOR_INACTIVE
     color_succeeded=$GIT_PROMPT_KIT_COLOR_SUCCEEDED
     color_user=$GIT_PROMPT_KIT_COLOR_USER
-    color_workdir=$GIT_PROMPT_KIT_COLOR_WORKDIR
   fi
 
   # Prompt character: % if normal, # if root (has configurable colors for status code of the previous command)
@@ -601,35 +744,20 @@ _git_prompt_kit_update_nongit() {
   fi
 
   if (( show_user || show_host )); then
-    (( show_user )) && GIT_PROMPT_KIT_USERHOST+="%F{$color_user}%n%f"
-    (( show_host )) && GIT_PROMPT_KIT_USERHOST+="%F{$color_host}${GIT_PROMPT_KIT_SYMBOL_HOST}%m%f"
-  fi
+    if (( show_user )); then
+      GIT_PROMPT_KIT_USERHOST+="%F{$color_user}%n%f"
+    fi
 
-  GIT_PROMPT_KIT_CWD="%F{$color_workdir}%$(( GIT_PROMPT_KIT_CWD_TRAILING_COUNT + 1 ))~%f"
-
-  if [[ -n $GIT_PROMPT_KIT_ROOT ]]; then
-    GIT_PROMPT_KIT_CWD=
-    
-    if [[ $VCS_STATUS_WORKDIR != $PWD ]]; then
-      cwd_path_components=( ${(s./.)PWD##$VCS_STATUS_WORKDIR} )
-
-      GIT_PROMPT_KIT_CWD+="%F{$color_workdir}"
-
-      if (( GIT_PROMPT_KIT_CWD_TRAILING_COUNT + 1 >= ${#cwd_path_components} )) || (( GIT_PROMPT_KIT_CWD_TRAILING_COUNT < 0 )); then
-        GIT_PROMPT_KIT_CWD+=${(j./.)cwd_path_components[0,-1]}
-      else
-        GIT_PROMPT_KIT_CWD+=.../${(j./.)cwd_path_components[$(( -1 - GIT_PROMPT_KIT_CWD_TRAILING_COUNT )),-1]}
-      fi
-
-      GIT_PROMPT_KIT_CWD+="%F{$color_inactive}"
+    if (( show_host )); then
+      GIT_PROMPT_KIT_USERHOST+="%F{$color_host}${GIT_PROMPT_KIT_SYMBOL_HOST}%m%f"
     fi
   fi
 
-  GIT_PROMPT_KIT_WORKDIR+=$GIT_PROMPT_KIT_ROOT
-  if [[ -n $GIT_PROMPT_KIT_ROOT && -n $GIT_PROMPT_KIT_CWD ]]; then
-    GIT_PROMPT_KIT_WORKDIR+="%F{$color_workdir}/%F{$color_inactive}"
+  if [[ -n $GIT_PROMPT_KIT_REPO_ROOT ]]; then
+    GIT_PROMPT_KIT_CWD="${GIT_PROMPT_KIT_REPO_ROOT}${GIT_PROMPT_KIT_REPO_SUBDIRECTORY:+/$GIT_PROMPT_KIT_REPO_SUBDIRECTORY}"
+  else
+    GIT_PROMPT_KIT_CWD="%F{$color_cwd}%$(( GIT_PROMPT_KIT_CWD_MAX_TRAILING_COUNT + 1 ))~%f%F{$color_inactive}"
   fi
-  GIT_PROMPT_KIT_WORKDIR+=$GIT_PROMPT_KIT_CWD
 }
 
 _git_prompt_kit_no_color() {
@@ -643,26 +771,31 @@ _git_prompt_kit_no_color() {
   return $found
 }
 
-# Source local gitstatus
-# Second param is added to gitstatus function names as a suffix
-'builtin' 'source' ${0:A:h}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX
+_git_prompt_kit_init() {
+  # Source local gitstatus
+  # Second param is added to gitstatus function names as a suffix
+  'builtin' 'source' ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX
 
-# Start gitstatusd instance with name $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME. The same name is passed to
-# gitstatus_query in _git_prompt_kit_update_git. The flags with -1 as values
-# enable staged, unstaged, conflicted and untracked counters.
-gitstatus_stop$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME && gitstatus_start$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX -s -1 -u -1 -c -1 -d -1 $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME
+  # Start gitstatusd instance with name $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME. The same name is passed to
+  # gitstatus_query in _git_prompt_kit_update_git. The flags with -1 as values
+  # enable staged, unstaged, conflicted and untracked counters.
+  gitstatus_stop$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME && gitstatus_start$GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX -s -1 -u -1 -c -1 -d -1 $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME
 
-# Support colors unless user has opted out
-if ! _git_prompt_kit_no_color; then
-  'builtin' 'autoload' -U colors && colors
-fi
+  # Support colors unless user has opted out
+  if ! _git_prompt_kit_no_color; then
+    'builtin' 'autoload' -U colors && colors
+  fi
 
-# On every prompt, refresh prompt content
-'builtin' 'autoload' -Uz add-zsh-hook
+  # On every prompt, refresh prompt content
+  'builtin' 'autoload' -Uz add-zsh-hook
 
-add-zsh-hook precmd _git_prompt_kit_update_git
-add-zsh-hook precmd _git_prompt_kit_update_nongit
+  add-zsh-hook precmd _git_prompt_kit_update_git
+  add-zsh-hook precmd _git_prompt_kit_update_nongit
 
-# Perform parameter expansion, command substitution and arithmetic expansion in the prompt,
-# and treat `%` specially
-'builtin' 'setopt' prompt_subst prompt_percent
+  # Perform parameter expansion, command substitution and arithmetic expansion in the prompt,
+  # and treat `%` specially
+  'builtin' 'setopt' prompt_subst prompt_percent
+}
+
+typeset -g GIT_PROMPT_KIT_SOURCE_PATH=${0:A:h}
+_git_prompt_kit_init

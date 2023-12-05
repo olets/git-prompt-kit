@@ -12,15 +12,10 @@ SPACESHIP_GIT_PROMPT_KIT_SUFFIX=${SPACESHIP_GIT_PROMPT_KIT_SUFFIX:- }
 spaceship_git_prompt_kit() {
   [[ $SPACESHIP_GIT_PROMPT_KIT_SHOW == false ]] && return
 
-  local 'git_prompt_kit_status'
-
-  git_prompt_kit_status=$(_git_prompt_kit_git_prompt)
-
-  [[ -z $git_prompt_kit_status ]] && return
+  [[ $VCS_STATUS_RESULT == 'ok-sync' ]] || return 0
 
   spaceship::section \
-    "" \
-    "$SPACESHIP_GIT_PROMPT_KIT_PREFIX" \
-    "$SPACESHIP_GIT_PROMPT_KIT_SYMBOL$(print -P $git_prompt_kit_status)" \
-    "$SPACESHIP_GIT_PROMPT_KIT_SUFFIX"
+    --prefix "$SPACESHIP_GIT_PROMPT_KIT_PREFIX" \
+    "$SPACESHIP_GIT_PROMPT_KIT_SYMBOL$(print -P ${GIT_PROMPT_KIT_REF:+$GIT_PROMPT_KIT_REF }${GIT_PROMPT_KIT_STATUS_EXTENDED:+$GIT_PROMPT_KIT_STATUS_EXTENDED }${GIT_PROMPT_KIT_STATUS:+$GIT_PROMPT_KIT_STATUS }${GIT_PROMPT_KIT_ACTION})" \
+    --suffix "$SPACESHIP_GIT_PROMPT_KIT_SUFFIX"
 }

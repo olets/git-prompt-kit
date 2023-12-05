@@ -1,3 +1,28 @@
+# [v4.0.0](https://github.com/olets/git-prompt-kit/compare/v3.0.1...v4.0.0) (2023-12-01)
+
+
+### Bug Fixes
+
+* **cwd:** non-git directories are colorized ([b24dbab](https://github.com/olets/git-prompt-kit/commit/b24dbabbaebcec5293ad9e6023058433379aaeb8))
+* **GIT_PROMPT_KIT_ROOT:** no leading slash if only one segment ([ed8fc2d](https://github.com/olets/git-prompt-kit/commit/ed8fc2d268ea047b3577a8f07e871754f9948d66))
+* **push head:** reset color at end of component ([4c9b31c](https://github.com/olets/git-prompt-kit/commit/4c9b31c5d6b2d3359876598be7ef2717926c3cc4))
+* **GIT_PROMPT_KIT_SYMBOL_ASSUME_UNCHANGED:** no trailing space ([6ecef0b](https://github.com/olets/git-prompt-kit/commit/6ecef0b57e4974d2985ba5f0f67a49bf7c6746f6))
+
+
+### Features
+
+* **cwd:** rework. cwd replaces workdir; new repo options, components ([198e791](https://github.com/olets/git-prompt-kit/commit/198e7914184aaf421b76b7ef223d21f2768b14d3))
+* **GIT_PROMPT_KIT_SYMBOL_LOCAL:** rename from GIT_PROMPT_KIT_LOCAL ([5457d5e](https://github.com/olets/git-prompt-kit/commit/5457d5eb979a701b76425e9757ae024740232d71))
+* **layout options:** drop support ([3bb1e3e](https://github.com/olets/git-prompt-kit/commit/3bb1e3e6ecb6430b7973241fb8e84dce2597ff77))
+* **remote:** only show remote symbol if there is also a push remote ([8ee7c07](https://github.com/olets/git-prompt-kit/commit/8ee7c07946dbf4ab10a0903e57175ccd618c0009))
+* **repo root:** relative to home ([914158c](https://github.com/olets/git-prompt-kit/commit/914158cc96adbd7155705e38ce5dc5e67012b573))
+* **spaceship section:** modernize ([2a1702e](https://github.com/olets/git-prompt-kit/commit/2a1702e1aec714b24185a44ad1de4eac1fe78f34))
+* **symbols:** add "verbose" alternate defaults ([17ee687](https://github.com/olets/git-prompt-kit/commit/17ee687d2e4681760eb9ee32ae19ee4d3f8218d3))
+* **symbols:** distinct inactive variants symbols ([b487535](https://github.com/olets/git-prompt-kit/commit/b4875355632211a7e80b1a36c3054d53808e2da8))
+* **GIT_PROMPT_KIT_VERSION:** add ([bebcf1a](https://github.com/olets/git-prompt-kit/commit/bebcf1ad4bcdd629e862f7825db901c11a34812e))
+
+
+
 # [v3.0.1](https://github.com/olets/git-prompt-kit/compare/v3.0.0...v3.0.1) (2022-11-27)
 
 

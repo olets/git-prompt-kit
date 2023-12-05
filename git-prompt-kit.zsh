@@ -773,19 +773,19 @@ _git_prompt_kit_no_color() {
 
 _git_prompt_kit_init() {
   # if installed with Homebrew, will not have .gitmodules
-  if [[ -f ${GIT_PROMPT_KIT_SOURCE_PATH}/.gitmodules && ! -f ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh ]]; then
+  if [[ -f ${_git_prompt_kit_source_path}/.gitmodules && ! -f ${_git_prompt_kit_source_path}/gitstatus/gitstatus.plugin.zsh ]]; then
     'builtin' 'print' Finishing installing Git Prompt Kit.
     'command' 'git' submodule update --init --recursive &>/dev/null
   fi
 
-  if ! [[ -f ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh ]]; then
+  if ! [[ -f ${_git_prompt_kit_source_path}/gitstatus/gitstatus.plugin.zsh ]]; then
     'builtin' 'print' There was problem finishing installing Git Prompt Kit.
     return
   fi
 
   # Source local gitstatus
   # Second param is added to gitstatus function names as a suffix
-  'builtin' 'source' ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX
+  'builtin' 'source' ${_git_prompt_kit_source_path}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX
 
   # Start gitstatusd instance with name $GIT_PROMPT_KIT_GITSTATUSD_INSTANCE_NAME. The same name is passed to
   # gitstatus_query in _git_prompt_kit_update_git. The flags with -1 as values
@@ -808,5 +808,14 @@ _git_prompt_kit_init() {
   'builtin' 'setopt' prompt_subst prompt_percent
 }
 
-typeset -g GIT_PROMPT_KIT_SOURCE_PATH=${0:A:h}
+git-prompt-kit() {
+  case "$1" in
+    --version|\
+    -v)
+      printf "git-prompt-kit version %s\n" "$GIT_PROMPT_KIT_VERSION"
+      ;;
+  esac
+}
+
+typeset -g _git_prompt_kit_source_path=${0:A:h}
 _git_prompt_kit_init

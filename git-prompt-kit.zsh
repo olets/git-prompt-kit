@@ -772,6 +772,17 @@ _git_prompt_kit_no_color() {
 }
 
 _git_prompt_kit_init() {
+  # if installed with Homebrew, will not have .gitmodules
+  if [[ -f ${GIT_PROMPT_KIT_SOURCE_PATH}/.gitmodules && ! -f ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh ]]; then
+    'builtin' 'print' Finishing installing Git Prompt Kit.
+    'command' 'git' submodule update --init --recursive &>/dev/null
+  fi
+
+  if ! [[ -f ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh ]]; then
+    'builtin' 'print' There was problem finishing installing Git Prompt Kit.
+    return
+  fi
+
   # Source local gitstatus
   # Second param is added to gitstatus function names as a suffix
   'builtin' 'source' ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh $GIT_PROMPT_KIT_GITSTATUS_FUNCTIONS_SUFFIX

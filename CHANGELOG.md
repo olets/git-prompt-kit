@@ -1,3 +1,12 @@
+# [v4.1.0](/compare/v4.0.0...v4.1.0) (2023-12-05)
+
+
+### Features
+
+* **submodules:** init if necessary ([6e58a31](https://github.com/olets/git-prompt-kit/commit/6e58a3124902a8e7e5d680e0365e836dd63b6e9d))
+
+
+
 # [v4.0.0](https://github.com/olets/git-prompt-kit/compare/v3.0.1...v4.0.0) (2023-12-01)
 
 

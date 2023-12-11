@@ -1,3 +1,13 @@
+# [v4.1.1](https://github.com/olets/git-prompt-kit/compare/v4.1.0...v4.1.1) (2023-12-11)
+
+
+### Features
+
+* **releases:** action to bump formula with each GitHub release ([b70a43b](https://github.com/olets/git-prompt-kit/commit/b70a43b96e7a8171abca7fb3f6b25b515a97b982))
+* **performance:** add zsh-bench configs ([7720678](https://github.com/olets/git-prompt-kit/commit/7720678097e8903a237b14cadbd7daf6c0d069a6))
+
+
+
 # [v4.1.0](/compare/v4.0.0...v4.1.0) (2023-12-05)
 
 

@@ -8,7 +8,7 @@
 
 ## Documentation
 
-📖 See the guide, including a web simulation demonstrating how the prompt responds to context and configuration, at https://hometown-prompt.olets.dev/
+📖 See the guide, including a web simulation demonstrating how the prompt responds to context and configuration, at https://git-prompt-kit.olets.dev/
 
 &nbsp;
 

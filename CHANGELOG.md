@@ -1,3 +1,8 @@
+# [v4.1.2](https://github.com/olets/git-prompt-kit/compare/v4.1.1...v4.1.2) (2024-03-26)
+
+* **dependenciess**: bump gitstatus from `215063d` to `62177e8` ([086cdab](https://github.com/olets/git-prompt-kit/commit/086cdaba344468a3a901ec05e64e50b94e63dd13))
+
+
 # [v4.1.1](https://github.com/olets/git-prompt-kit/compare/v4.1.0...v4.1.1) (2023-12-11)
 
 

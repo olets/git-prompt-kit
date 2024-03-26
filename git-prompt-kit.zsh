@@ -1,12 +1,12 @@
 #!/usr/bin/env zsh
 
 # Git Prompt Kit
-# v4.1.1
-# Dec 11 2023
+# v4.1.2
+# March 26 2024
 # https://github.com/olets/git-prompt-kit
 # Copyright (©) 2019-present Henry Bley-Vroman
 
-typeset -r GIT_PROMPT_KIT_VERSION="4.1.1"
+typeset -r GIT_PROMPT_KIT_VERSION="4.1.2"
 
 # Behavior options
 typeset -gi GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND=${GIT_PROMPT_KIT_HIDE_INACTIVE_AHEAD_BEHIND:-1}

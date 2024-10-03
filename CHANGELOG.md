@@ -1,3 +1,19 @@
+# [v4.1.4](https://github.com/olets/git-prompt-kit/compare/v4.1.3...v4.1.4) (2024-10-03)
+
+
+### Bug Fixes
+
+* **GIT_PROMPT_KIT_REPO_SUBDIRECTORY:** play nice with case-insensitive file systems ([be2cd7c](https://github.com/olets/git-prompt-kit/commit/be2cd7c4b8a73058afcd9691d4c5a6dda1d11a5b))
+
+
+### Features
+
+* **_git_prompt_kit_init:** remove after initialization ([f031038](https://github.com/olets/git-prompt-kit/commit/f03103843d4cf0137ebb170bb7509375ac0080cb))
+
+* **dependencies**: bump gitstatus from `3e08476` to `44504a2` ([ab5e903](https://github.com/olets/git-prompt-kit/commit/ab5e90355d12cfd1839363a3ac284fe40b26bf8f))
+
+
+
 # [v4.1.3](https://github.com/olets/git-prompt-kit/compare/v4.1.2...v4.1.3) (2024-06-02)
 
 * **ci**: do not bump Homebrew for GitHub prereleases ([bdc4925](https://github.com/olets/git-prompt-kit/commit/bdc49252aa5c7467d46c875e4be2ddc51b8be3d8))

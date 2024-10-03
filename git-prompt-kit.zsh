@@ -810,3 +810,4 @@ _git_prompt_kit_init() {
 
 typeset -g GIT_PROMPT_KIT_SOURCE_PATH=${0:A:h}
 _git_prompt_kit_init
+unfunction -m _git_prompt_kit_init

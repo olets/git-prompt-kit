@@ -91,6 +91,7 @@ GIT_PROMPT_KIT_SYMBOL_UNTRACKED_INACTIVE=${GIT_PROMPT_KIT_SYMBOL_UNTRACKED_INACT
 
 # END OF CONFIG VARIABLES
 
+typeset -gi _git_prompt_kit_case_insensitive_file_system
 
 typeset -ga _git_prompt_kit_colors
 _git_prompt_kit_colors=(
@@ -227,6 +228,7 @@ _git_prompt_kit_update_git() {
   local -a repo_root_path_components
   local -a repo_subdirectory_path_components
   local -i added_staged_count
+  local -i pwd_is_subdirectory_of_repo
   local -i show_ahead
   local -i show_behind
   local -i show_push_ahead
@@ -253,6 +255,16 @@ _git_prompt_kit_update_git() {
 
   (( added_staged_count = VCS_STATUS_NUM_STAGED - VCS_STATUS_NUM_STAGED_NEW - VCS_STATUS_NUM_STAGED_DELETED ))
   (( unstaged_count = VCS_STATUS_NUM_UNSTAGED - VCS_STATUS_NUM_UNSTAGED_DELETED ))
+
+  if (( _git_prompt_kit_case_insensitive_file_system )); then
+    [[ ${VCS_STATUS_WORKDIR:l} != ${PWD:l} ]] && {
+      pwd_is_subdirectory_of_repo=1
+    }
+  else
+    [[ ${VCS_STATUS_WORKDIR} != ${PWD} ]] && {
+      pwd_is_subdirectory_of_repo=1
+    }
+  fi
 
   if [[ -n $VCS_STATUS_REMOTE_NAME ]] && [[ $VCS_STATUS_REMOTE_NAME != $GIT_PROMPT_KIT_DEFAULT_REMOTE_NAME ]]; then
     show_remote=1
@@ -298,7 +310,7 @@ _git_prompt_kit_update_git() {
   GIT_PROMPT_KIT_REPO_ROOT+="%F{$color_inactive}"
 
   # Git repo subdirectory
-  if [[ $VCS_STATUS_WORKDIR != $PWD ]]; then
+  if (( pwd_is_subdirectory_of_repo )); then
     repo_subdirectory_path_components=( ${(s./.)PWD##$VCS_STATUS_WORKDIR} )
 
     GIT_PROMPT_KIT_REPO_SUBDIRECTORY+="%F{$color_repo}"
@@ -772,6 +784,9 @@ _git_prompt_kit_no_color() {
 }
 
 _git_prompt_kit_init() {
+  local tmpdir
+  local tmpfile
+
   # if installed with Homebrew, will not have .gitmodules
   if [[ -f ${GIT_PROMPT_KIT_SOURCE_PATH}/.gitmodules && ! -f ${GIT_PROMPT_KIT_SOURCE_PATH}/gitstatus/gitstatus.plugin.zsh ]]; then
     'builtin' 'print' Finishing installing Git Prompt Kit.
@@ -782,6 +797,14 @@ _git_prompt_kit_init() {
     'builtin' 'print' There was problem finishing installing Git Prompt Kit.
     return
   fi
+
+  # Determine whether file system is case insensitive
+  tmpdir=${${TMPDIR:-/tmp}%/}/git-prompt-kit
+  'command' 'mkdir' -p $tmpdir
+  tmpfile=$(mktemp ${tmpdir}/file.XXXXXX)
+  [[ -f ${(j:/git-prompt-kit/File.:)${(s:/git-prompt-kit/file.:)tmpfile}} ]] && {
+    _git_prompt_kit_case_insensitive_file_system=1
+  }
 
   # Source local gitstatus
   # Second param is added to gitstatus function names as a suffix

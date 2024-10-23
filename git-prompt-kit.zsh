@@ -561,15 +561,19 @@ _git_prompt_kit_update_git() {
     fi
 
     if (( triangular_workflow )); then
-      if (( VCS_STATUS_PUSH_COMMITS_AHEAD || VCS_STATUS_PUSH_COMMITS_BEHIND )); then
-        GIT_PROMPT_KIT_PUSH+="%F{$color_push_remote}"
-      fi
 
       if [[ $VCS_STATUS_PUSH_REMOTE_NAME != $GIT_PROMPT_KIT_DEFAULT_PUSH_REMOTE_NAME ]]; then
-        GIT_PROMPT_KIT_PUSH+="$GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE$VCS_STATUS_PUSH_REMOTE_NAME"
+        if (( VCS_STATUS_PUSH_COMMITS_AHEAD || VCS_STATUS_PUSH_COMMITS_BEHIND )); then
+          GIT_PROMPT_KIT_PUSH+="%F{$color_push_remote}"
+          # DUPE this `if`'s `then` and `else`
+          GIT_PROMPT_KIT_PUSH+="$GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE$VCS_STATUS_PUSH_REMOTE_NAME"
+          GIT_PROMPT_KIT_PUSH+="%F{$color_inactive}"
+        else
+          # DUPE this `if`'s `then` and `else`
+          GIT_PROMPT_KIT_PUSH+="$GIT_PROMPT_KIT_SYMBOL_PUSH_REMOTE$VCS_STATUS_PUSH_REMOTE_NAME"
+        fi
       fi
 
-      GIT_PROMPT_KIT_PUSH+="%F{$color_inactive}"
 
       # push remote branch would go here
 

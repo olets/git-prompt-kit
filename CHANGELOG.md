@@ -1,3 +1,12 @@
+# [v4.1.5](https://github.com/olets/git-prompt-kit/compare/v4.1.4...v4.1.5) (2024-10-23)
+
+
+### Bug Fixes
+
+* **GIT_PROMPT_KIT_REF:** no extra space for default-named push remote ([fe73c35](https://github.com/olets/git-prompt-kit/commit/fe73c355e89e33cd196fad0f8412e11eb029b379))
+
+
+
 # [v4.1.4](https://github.com/olets/git-prompt-kit/compare/v4.1.3...v4.1.4) (2024-10-03)
 
 
